@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "echo \"No frontend tests yet\""
+
   },
   "dependencies": {
     "@clerk/nextjs": "^6.31.9",
