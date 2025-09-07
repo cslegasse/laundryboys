@@ -31,8 +31,8 @@ jobs:
       # Run backend tests (assumes pytest)
       - name: Run backend tests
         run: |
-          cd backend/app
-          pytest
+          cd backend
+          pytest app
 
   frontend:
     name: Frontend (Next.js)
