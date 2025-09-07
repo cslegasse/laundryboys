@@ -1,6 +1,5 @@
 name: CI
 
-# Trigger on push to main or any feature branch, and on PRs
 on:
   push:
     branches:
@@ -49,21 +48,15 @@ jobs:
 
       # Install frontend dependencies
       - name: Install frontend dependencies
-        run: |
-          cd src
-          npm ci
+        run: npm ci
 
       # Run frontend tests
       - name: Run frontend tests
-        run: |
-          cd src
-          npm run test -- --watchAll=false
+        run: npm run test -- --watchAll=false
 
-      # Optional: run Next.js build to catch build errors
+      # Run Next.js build to catch build errors
       - name: Build Next.js app
-        run: |
-          cd src
-          npm run build
+        run: npm run build
 
   lint:
     name: Lint
