@@ -31,9 +31,9 @@ jobs:
       # Run backend tests
       - name: Run backend tests
         run: |
-          cd backend
-          pytest app
-
+             cd backend
+             export PYTHONPATH=$PYTHONPATH:$(pwd)
+             pytest app
   frontend:
     name: Frontend (Next.js)
     runs-on: ubuntu-latest
