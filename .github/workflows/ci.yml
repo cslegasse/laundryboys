@@ -29,10 +29,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
-      # Run backend tests
+      # Run backend tests (assumes pytest)
       - name: Run backend tests
         run: |
-          cd backend
+          cd backend/app
           pytest
 
   frontend:
@@ -50,14 +50,20 @@ jobs:
       # Install frontend dependencies
       - name: Install frontend dependencies
         run: |
-          cd frontend
+          cd src
           npm ci
 
       # Run frontend tests
       - name: Run frontend tests
         run: |
-          cd frontend
+          cd src
           npm run test -- --watchAll=false
+
+      # Optional: run Next.js build to catch build errors
+      - name: Build Next.js app
+        run: |
+          cd src
+          npm run build
 
   lint:
     name: Lint
@@ -72,7 +78,7 @@ jobs:
           python-version: '3.11'
       - run: |
           pip install flake8
-          flake8 backend/
+          flake8 backend/app
 
       # JavaScript/TypeScript lint
       - name: JS/TS lint
@@ -80,6 +86,6 @@ jobs:
         with:
           node-version: '20'
       - run: |
-          cd frontend
+          cd src
           npm ci
           npm run lint
