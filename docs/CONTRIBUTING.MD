@@ -1,3 +1,3 @@
-## Contributing to GetThisBag
+## Contributing to LaundryBoys
 
 
