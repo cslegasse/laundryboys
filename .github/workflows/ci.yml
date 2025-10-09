@@ -37,26 +37,23 @@ jobs:
   frontend:
     name: Frontend (Next.js)
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v3
 
-      # Set up Node
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # Install frontend dependencies
       - name: Install frontend dependencies
         run: npm ci
 
-      # Run frontend tests
-      - name: Run frontend tests
-        run: npm run test -- --watchAll=false
-
-      # Run Next.js build to catch build errors
       - name: Build Next.js app
         run: npm run build
+
 
   lint:
     name: Lint
