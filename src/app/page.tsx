@@ -21,7 +21,14 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-blue-600 transition-colors">How It Works</a>
             <a href="#about" className="hover:text-blue-600 transition-colors">About</a>
           </nav>
+          <div className="flex items-center gap-4">
 
+              <SignInButton mode="modal">
+                <button className="px-5 py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                  Login
+                </button>
+              </SignInButton>
+          </div>
         </div>
       </header>
 
