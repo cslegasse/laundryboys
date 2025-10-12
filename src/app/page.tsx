@@ -9,9 +9,7 @@ export default function Home() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-blue-100 shadow-sm">
         <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <a href="#" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold transform group-hover:scale-110 transition-transform">
-              K
-            </div>
+
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
               Kleanr
             </span>
@@ -21,11 +19,6 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-blue-600 transition-colors">How It Works</a>
             <a href="#about" className="hover:text-blue-600 transition-colors">About</a>
           </nav>
-          <div className="flex items-center gap-4">
-            <button className="px-5 py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-              Login
-            </button>
-          </div>
         </div>
       </header>
 
