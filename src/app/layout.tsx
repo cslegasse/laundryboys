@@ -14,7 +14,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kleanr | Effortless Cleaning, Redefined1333.",
+  title: "Kleanr | Effortless Cleaning, Redefined.",
   description: "The modern solution for all your cleaning needs.",
 };
 
