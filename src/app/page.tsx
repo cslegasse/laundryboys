@@ -87,13 +87,18 @@ export default function Home() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-20 sm:py-24 bg-gray-50">
-           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900">About Kleanr</h2>
-                <p className="mt-6 text-lg text-gray-600 text-balance">
-                    Founded in 2024, Kleanr was born from a simple idea: cleaning services should be simple, reliable, and sustainable. We leverage technology to create a seamless experience for our customers while promoting practices that protect our environment. Our mission is to build a cleaner world, one space at a time.
-                </p>
-           </div>
+        <section id="about" className="py-24 bg-gradient-to-b from-blue-50 to-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+            <div className="text-center">
+              <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-6">About Kleanr</h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                Founded in 2024, Kleanr was born from a simple idea: cleaning services should be simple, reliable, and sustainable. We leverage technology to create a seamless experience for our customers while promoting practices that protect our environment.
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Our mission is to build a cleaner world, one space at a time. Join thousands of satisfied customers who trust Kleanr for their cleaning needs.
+              </p>
+            </div>
+          </div>
         </section>
       </main>
 
