@@ -52,9 +52,6 @@ export default function Home() {
               Kleanr provides modern, eco-friendly solutions to keep your space sparkling. Join us and experience the future of clean.
             </p>
             <div className="mt-10 flex justify-center gap-4 animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
-              <a href="#" className="inline-flex items-center justify-center gap-2 px-6 py-3 font-medium text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition-transform hover:scale-105">
-                Get Started <ArrowRight className="w-4 h-4" />
-              </a>
             </div>
           </div>
         </section>
