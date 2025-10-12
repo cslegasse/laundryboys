@@ -99,8 +99,16 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
-        <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Kleanr. All rights reserved.</p>
+        <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold">
+                K
+              </div>
+              <span className="text-2xl font-bold">Kleanr</span>
+            </div>
+            <p className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} Kleanr. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
