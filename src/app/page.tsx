@@ -24,13 +24,9 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <SignedOut>
               <SignInButton mode="modal">
-                <button className="px-5 py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-                  Login
-                </button>
+
               </SignInButton>
-              <button className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-full hover:shadow-lg hover:scale-105 transition-all">
-                Get Started
-              </button>
+
             </SignedOut>
             <SignedIn>
               <UserButton />
