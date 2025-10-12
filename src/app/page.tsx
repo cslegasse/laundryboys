@@ -85,9 +85,6 @@ export default function Home() {
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
                 Founded in 2024, Kleanr was born from a simple idea: cleaning services should be simple, reliable, and sustainable. We leverage technology to create a seamless experience for our customers while promoting practices that protect our environment.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Our mission is to build a cleaner world, one space at a time. Join thousands of satisfied customers who trust Kleanr for their cleaning needs.
-              </p>
             </div>
           </div>
         </section>
