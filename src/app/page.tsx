@@ -11,7 +11,9 @@ export default function Home() {
       <main className="flex-grow pt-16">
         {/* Hero Section */}
 
-
+        <div className="p-6 rounded-xl bg-blue-500 text-white">
+          Tailwind is working
+        </div>
         {/* Solutions Section */}
         <section id="solutions" className="py-24 bg-gradient-to-b from-white to-blue-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
