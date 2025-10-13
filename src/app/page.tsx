@@ -1,4 +1,5 @@
 // src/app/page.tsx
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ArrowRight, Zap, ShieldCheck, Heart } from "lucide-react"; 
 
 export default function Home() {
