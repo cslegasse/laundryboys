@@ -10,27 +10,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow pt-16">
         {/* Hero Section */}
-        <section className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
-          {/* Animated background blobs */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 animate-fadeInUp">
-                Professional Cleaning,
-                <span className="block mt-2 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-                  Delivered with Care
-                </span>
-              </h1>
-              <p className="mt-6 text-xl text-gray-600 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-                Experience hassle-free dry cleaning and laundry services. Schedule pickup, track your order, and get your clothes back fresh and clean.
-              </p>
 
-            </div>
-          </div>
-        </section>
 
         {/* Solutions Section */}
         <section id="solutions" className="py-24 bg-gradient-to-b from-white to-blue-50">
