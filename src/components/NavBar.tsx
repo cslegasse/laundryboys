@@ -25,7 +25,6 @@ export default function Navbar() {
       className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 z-50"
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold">
             K
@@ -33,7 +32,6 @@ export default function Navbar() {
           <span className="text-2xl font-extrabold text-gray-800 tracking-tight">Kleanr</span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
@@ -52,7 +50,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gray-700 hover:text-blue-600 transition"
           onClick={() => setIsOpen(!isOpen)}
@@ -60,7 +57,6 @@ export default function Navbar() {
           {isOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
 
-        {/* Mobile Dropdown */}
         <AnimatePresence>
           {isOpen && (
             <motion.div

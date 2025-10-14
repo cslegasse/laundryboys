@@ -1,10 +1,9 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { Zap, ShieldCheck, Heart, BarChart, Cloud, Database, Users, ArrowRight } from "lucide-react";
+import { LucideIcon, Zap, ShieldCheck, BarChart, Cloud, Database, Users, ArrowRight } from "lucide-react";
 import FAQ from "@/components/FAQ"
 
-// ✅ Correct Framer Motion Variants type
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: (custom = 0) => ({
@@ -14,10 +13,15 @@ const fadeUp: Variants = {
   }),
 };
 
-// === Reusable Components ===
-
-// Slightly translucent, soft-shadow card
-function GlassCard({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+function GlassCard({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}) {
   return (
     <motion.div
       whileHover={{ scale: 1.03, y: -3 }}
@@ -32,12 +36,10 @@ function GlassCard({ icon: Icon, title, description }: { icon: any; title: strin
   );
 }
 
-// Section wrapper with consistent spacing
 const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <section className={`py-16 sm:py-20 ${className}`}>{children}</section>
 );
 
-// Gradient text utility
 const GradientText = ({ children }: { children: React.ReactNode }) => (
   <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">{children}</span>
 );
@@ -46,7 +48,6 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-grow pt-12">
-        {/* ===== HERO ===== */}
         <Section className="relative text-center">
           <div className="absolute -top-10 left-10 w-56 h-56 bg-blue-100 rounded-full mix-blend-multiply blur-3xl opacity-70 animate-blob"></div>
           <div className="absolute top-20 right-10 w-56 h-56 bg-blue-200 rounded-full mix-blend-multiply blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
