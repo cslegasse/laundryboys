@@ -10,6 +10,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
+import Navbar from "@/components/NavBar";
+import MarqueeBar from "@/components/MarqueeBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,26 +22,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">
-        <body suppressHydrationWarning className={`${inter.className} antialiased bg-white text-gray-900`}>
-          {/* Header */}
+        <body
+          suppressHydrationWarning
+          className={`${inter.className} antialiased bg-white text-gray-900`}
+        >
           <header className="flex justify-between items-center p-6 shadow-sm border-b border-gray-100">
             <h1 className="text-2xl font-bold text-[#1E90FF]">Kleanr</h1>
-
-            <nav className="flex gap-6 text-sm font-medium">
-              <a href="#about" className="hover:text-[#1E90FF] transition">
-                About
-              </a>
-              <a href="#solutions" className="hover:text-[#1E90FF] transition">
-                Solutions
-              </a>
-            </nav>
-
+            <Navbar />
             <div className="flex gap-3">
               <SignedOut>
                 <SignInButton mode="modal">
@@ -53,14 +48,16 @@ export default function RootLayout({
                   </button>
                 </SignUpButton>
               </SignedOut>
+
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
             </div>
           </header>
 
-          {/* Main content */}
-          <main>{children}</main>
+          <MarqueeBar />
+
+         <main>{children}</main>
         </body>
       </html>
     </ClerkProvider>

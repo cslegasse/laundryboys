@@ -1,119 +1,166 @@
-// src/app/page.tsx
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { ArrowRight, Zap, ShieldCheck, Heart } from "lucide-react"; 
+"use client";
+
+import { motion, Variants } from "framer-motion";
+import { LucideIcon, Zap, ShieldCheck, BarChart, Cloud, Database, Users, ArrowRight } from "lucide-react";
+import FAQ from "@/components/FAQ"
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (custom = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: custom * 0.15, duration: 0.5, ease: "easeOut" },
+  }),
+};
+
+function GlassCard({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.03, y: -3 }}
+      className="p-6 bg-white/70 backdrop-blur-md border border-blue-100 rounded-2xl shadow-sm hover:shadow-md transition-all"
+    >
+      <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-xl mb-4">
+        <Icon className="w-6 h-6" />
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+    </motion.div>
+  );
+}
+
+const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <section className={`py-16 sm:py-20 ${className}`}>{children}</section>
+);
+
+const GradientText = ({ children }: { children: React.ReactNode }) => (
+  <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">{children}</span>
+);
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Main Content */}
-      <main className="flex-grow pt-16">
-        {/* Hero Section */}
-        <section className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
-          {/* Animated background blobs */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 animate-fadeInUp">
-                Professional Cleaning,
-                <span className="block mt-2 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-                  Delivered with Care
-                </span>
-              </h1>
-              <p className="mt-6 text-xl text-gray-600 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-                Experience hassle-free dry cleaning and laundry services. Schedule pickup, track your order, and get your clothes back fresh and clean.
-              </p>
+      <main className="flex-grow pt-12">
+        <Section className="relative text-center">
+          <div className="absolute -top-10 left-10 w-56 h-56 bg-blue-100 rounded-full mix-blend-multiply blur-3xl opacity-70 animate-blob"></div>
+          <div className="absolute top-20 right-10 w-56 h-56 bg-blue-200 rounded-full mix-blend-multiply blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
 
+          <div className="relative z-10 container mx-auto px-6 max-w-4xl">
+            <motion.h1
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="text-5xl sm:text-6xl font-extrabold text-gray-900"
+            >
+              Smarter Laundry Management <br />
+              <GradientText>Made Simple for Small Businesses</GradientText>
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={1}
+              className="mt-5 text-lg text-gray-600 max-w-2xl mx-auto"
+            >
+              Kleanr helps laundry owners run their business effortlessly — track orders, accept payments, and update customers, all from one place.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              className="mt-8 flex justify-center gap-4"
+            >
+              <button className="px-7 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full text-base font-semibold shadow-lg hover:shadow-xl transition">
+                Get a Demo
+              </button>
+              <button className="px-7 py-3 border border-blue-500 text-blue-600 rounded-full text-base font-semibold hover:bg-blue-50 transition">
+                See How It Works
+              </button>
+            </motion.div>
+          </div>
+        </Section>
+
+        <Section className="bg-gradient-to-b from-white to-blue-50">
+          <div className="container mx-auto px-6 text-center max-w-4xl">
+            <motion.h2
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              className="text-3xl sm:text-4xl font-bold text-gray-900 mb-5"
+            >
+              The Smarter Way to Manage Your Laundry Shop
+            </motion.h2>
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              custom={1}
+              className="text-gray-600 leading-relaxed text-base sm:text-lg"
+            >
+              No more misplaced tickets or long spreadsheets. Kleanr gives you a clear overview of your business — from customer drop-off to payment — all in one easy dashboard.
+            </motion.p>
+          </div>
+        </Section>
+
+        <Section>
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">What You Can Do With Kleanr</h2>
+              <p className="text-gray-600 text-base">Simple tools to make running your laundry business easier than ever.</p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+              <GlassCard icon={Database} title="Track Every Order" description="See all your orders in one place — sorted by status, completion date, or customer name." />
+              <GlassCard icon={BarChart} title="Understand Your Business" description="View key insights like busiest days, top customers, and total revenue in clean charts." />
+              <GlassCard icon={Zap} title="Instant Notifications" description="Keep customers updated with ready-for-pickup alerts or delivery reminders automatically." />
+              <GlassCard icon={Cloud} title="Accessible Anywhere" description="Log in from your phone, tablet, or laptop — your data stays synced across all devices." />
+              <GlassCard icon={Users} title="Customer Profiles" description="Save preferences and order history so you can serve returning customers faster." />
+              <GlassCard icon={ShieldCheck} title="Safe & Secure" description="Your data is protected with enterprise-level encryption and secure payment options." />
             </div>
           </div>
-        </section>
+        </Section>
 
-        {/* Solutions Section */}
-        <section id="solutions" className="py-24 bg-gradient-to-b from-white to-blue-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">Why Choose Kleanr?</h2>
-              <p className="text-lg text-gray-600">Experience the perfect blend of convenience, quality, and sustainability.</p>
-            </div>
-            <div className="grid gap-8 md:grid-cols-2 max-w-6xl mx-auto">
-              {/* Card 2 */}
-              <div className="group p-8 bg-white border border-blue-100 rounded-2xl shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-xl mb-6 group-hover:scale-110 transition-transform">
-                  <ShieldCheck className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">Trusted Quality</h3>
-                <p className="text-gray-600 leading-relaxed">Every provider is vetted, insured, and rated. Your garments are in safe, professional hands.</p>
-              </div>
-              
-              {/* Card 3 */}
-              <div className="group p-8 bg-white border border-blue-100 rounded-2xl shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-xl mb-6 group-hover:scale-110 transition-transform">
-                  <Heart className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">Eco-Friendly</h3>
-                <p className="text-gray-600 leading-relaxed">We use sustainable, non-toxic products that are safe for you, your clothes, and our planet.</p>
-              </div>
-            </div>
+        <Section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center rounded-t-[3rem] shadow-inner">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <motion.h2
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              className="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
+              Ready to Modernize Your Laundry Business?
+            </motion.h2>
+            <p className="text-blue-100 mb-6 text-base sm:text-lg">
+              Try a free demo and see how Kleanr can save time, reduce errors, and keep your customers happier.
+            </p>
+            <button className="px-8 py-3 bg-white text-blue-700 rounded-full text-base font-semibold hover:bg-blue-50 transition inline-flex items-center gap-2">
+              Get Started Now <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
-        </section>
-
-        {/* How It Works Section */}
-        <section id="how-it-works" className="py-24 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">How It Works</h2>
-              <p className="text-lg text-gray-600">Getting your clothes cleaned has never been easier.</p>
-            </div>
-            <div className="grid gap-12 md:grid-cols-2 max-w-5xl mx-auto">
-              {/* Step 1 */}
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full text-2xl font-bold mb-6">
-                  1
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Schedule Pickup</h3>
-                <p className="text-gray-600">Choose your preferred time slot and drop off you clothes.</p>
-              </div>
-              
-              {/* Step 2 */}
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full text-2xl font-bold mb-6">
-                  2
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">We Clean</h3>
-                <p className="text-gray-600">Our professionals handle your garments with expert care.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section id="about" className="py-24 bg-gradient-to-b from-blue-50 to-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <div className="text-center">
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-6">About Kleanr</h2>
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                Founded in 2025, Kleanr was born from a simple idea: cleaning services should be simple, reliable, and sustainable. We leverage technology to create a seamless experience for our customers while promoting practices that protect our environment.
-              </p>
-            </div>
-          </div>
-        </section>
-
+        </Section>
+        <FAQ/>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white">
-        <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold">
-                K
-              </div>
-              <span className="text-2xl font-bold">Kleanr</span>
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold">
+              K
             </div>
-            <p className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} Kleanr. All rights reserved.</p>
+            <span className="text-xl font-bold">Kleanr</span>
           </div>
+          <p className="text-gray-400 text-sm">
+            © {new Date().getFullYear()} Kleanr. Helping local laundry shops work smarter every day.
+          </p>
         </div>
       </footer>
     </div>
