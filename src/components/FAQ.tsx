@@ -5,19 +5,19 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     q: "Is Kleanr free to use?",
-    a: "We offer a 14-day free trial with no credit card required. After that, choose a plan that fits your shop size.",
+    a: "Start with a 14-Day Free Trial — No Payment Required! Enjoy full access to all our features for 14 days with absolutely no commitment. After the trial, simply choose the plan that best suits your shop’s needs and continue with a flexible subscription.",
   },
   {
     q: "Can I access Kleanr on my phone?",
-    a: "Yes! Kleanr is fully responsive and works perfectly on mobile browsers.",
+    a: "Absolutely! Kleanr is fully mobile-friendly and works seamlessly on all modern smartphones and tablets. Both customers and admins can manage everything directly from their mobile browsers — no app download required.",
   },
   {
     q: "Is my business data safe?",
-    a: "Absolutely. All data is encrypted in transit and at rest using industry-grade security standards.",
+    a: "Yes — your data security is our top priority. All information is encrypted both in transit and at rest, using industry-standard security protocols to keep your business and customer data safe.",
   },
   {
     q: "Can I manage multiple shops?",
-    a: "Yes. Our Pro plan supports multiple locations under one dashboard.",
+    a: "You can! Our Pro plan is designed for businesses with multiple locations. Manage all your shops from one easy-to-use dashboard without any hassle.",
   },
 ];
 
