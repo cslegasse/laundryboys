@@ -27,8 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     return res.status(200).json({ success: true, synced: allUsers.length });
-  } catch (err: any) {
-    console.error("Sync error:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
+    } catch (err: unknown) {
+    if (err instanceof Error) {
+        console.error("Sync error:", err.message);
+      } else {
+        console.error("Sync error:", err);
+      }
+      return res.status(500).json({ error: "Internal server error" });
+    }
 }
