@@ -3,6 +3,9 @@
 import { motion, Variants } from "framer-motion";
 import { LucideIcon, Zap, ShieldCheck, BarChart, Cloud, Database, Users, ArrowRight } from "lucide-react";
 import FAQ from "@/components/FAQ"
+import { useEffect } from "react";
+import { useAuth, useUser} from "@clerk/nextjs";
+import axios from "axios";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -45,7 +48,38 @@ const GradientText = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Home() {
-  return (
+  const { userId, getToken } = useAuth();
+  const { user } = useUser(); // gives access to Clerk user object
+
+  useEffect(() => {
+    async function syncUser() {
+      if (!userId || !user) return;
+
+      const token = await getToken({ template: "supabase-sync" });
+
+      try {
+        await axios.post(
+          "/api/sync-user",
+          {
+            email: user.primaryEmailAddress?.emailAddress,
+            role: "customer",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("User synced successfully");
+      } catch (err) {
+        console.error("Error syncing user:", err);
+      }
+    }
+
+    syncUser();
+  }, [userId, user, getToken]);
+  
+  return(
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-grow pt-12">
         <Section className="relative text-center">
