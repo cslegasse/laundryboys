@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,12 +43,25 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="#demo"
-            className="ml-4 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full font-semibold shadow hover:shadow-md transition"
-          >
-            Get a Demo
-          </Link>
+          
+          {/* Added Auth Buttons */}
+          <div className="flex gap-3 ml-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="border border-[#1E90FF] text-[#1E90FF] rounded-full px-4 py-2 hover:bg-[#1E90FF] hover:text-white transition">
+                  Login
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="bg-[#1E90FF] text-white rounded-full px-4 py-2 hover:opacity-90 transition">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
         </div>
 
         <button
@@ -76,13 +90,29 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                href="#demo"
-                onClick={() => setIsOpen(false)}
-                className="px-6 py-4 text-center bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold"
-              >
-                Get a Demo
-              </Link>
+              
+              {/* Added Mobile Auth Buttons */}
+              <div className="p-4 bg-gray-50">
+                <SignedOut>
+                  <div className="flex gap-3">
+                    <SignInButton mode="modal">
+                      <button className="flex-1 border border-[#1E90FF] text-[#1E90FF] rounded-full px-4 py-2 hover:bg-[#1E90FF] hover:text-white transition">
+                        Login
+                      </button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <button className="flex-1 bg-[#1E90FF] text-white rounded-full px-4 py-2 hover:opacity-90 transition">
+                        Sign Up
+                      </button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex justify-center py-2">
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
+                </SignedIn>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
