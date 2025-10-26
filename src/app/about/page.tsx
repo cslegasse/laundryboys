@@ -190,7 +190,6 @@ export default function About() {
             </button>
           </div>
         </Section>
-
         {/* FAQ Section */}
         <FAQ />
       </main>
