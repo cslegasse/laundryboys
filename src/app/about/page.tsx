@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 
+// Animation Variants
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: (custom = 0) => ({
@@ -16,6 +17,7 @@ const fadeUp: Variants = {
   }),
 };
 
+// GlassCard Component
 function GlassCard({
   icon: Icon,
   title,
@@ -39,6 +41,7 @@ function GlassCard({
   );
 }
 
+// Section Layout
 const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <section className={`py-16 sm:py-20 ${className}`}>{children}</section>
 );
@@ -47,9 +50,28 @@ const GradientText = ({ children }: { children: React.ReactNode }) => (
   <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">{children}</span>
 );
 
+function TeamMemberCard({
+  name,
+  role,
+}: {
+  name: string;
+  role: string;
+  image?: string;
+}) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05, y: -3 }}
+      className="p-6 bg-white/70 backdrop-blur-md border border-blue-100 rounded-2xl shadow-sm hover:shadow-md transition-all text-center"
+    >
+      <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+      <p className="text-gray-600 text-sm">{role}</p>
+    </motion.div>
+  );
+}
+
 export default function About() {
   const { userId, getToken } = useAuth();
-  const { user } = useUser(); // gives access to Clerk user object
+  const { user } = useUser();
 
   useEffect(() => {
     async function syncUser() {
@@ -104,24 +126,9 @@ export default function About() {
               custom={1}
               className="mt-5 text-lg text-gray-600 max-w-2xl mx-auto"
             >
-              We&apos;re on a mission to simplify the way your businesses operate, providing seamless solutions that
-              save time and increase efficiency.
+              Our mission is simple: to help dry cleaning businesses thrive by simplifying and streamlining operations 
+              with innovative, easy-to-use tools that save time, reduce costs, and enhance customer service.
             </motion.p>
-
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={2}
-              className="mt-8 flex justify-center gap-4"
-            >
-              <button className="px-7 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full text-base font-semibold shadow-lg hover:shadow-xl transition">
-                Get Started
-              </button>
-              <button className="px-7 py-3 border border-blue-500 text-blue-600 rounded-full text-base font-semibold hover:bg-blue-50 transition">
-                Learn More
-              </button>
-            </motion.div>
           </div>
         </Section>
 
@@ -143,53 +150,91 @@ export default function About() {
               custom={1}
               className="text-gray-600 leading-relaxed text-base sm:text-lg"
             >
-              We started with a simple goal: to help small businesses, like dry cleaners, 
-              become more efficient and effective in the digital age. Our products are 
-              designed to streamline operations, reduce common errors in laundry processing, 
-              and enhance customer satisfaction—so dry cleaners can focus on delivering quality 
-              service while saving time and resources.
+              Kleanr was born out of the need for small businesses, especially dry cleaners, to adapt to the digital age. 
+              We know that running a local business is challenging, so we designed Kleanr to take care of the operational burdens, 
+              allowing you to focus on what matters most: delivering exceptional customer service. From tracking orders to 
+              managing customer profiles, Kleanr simplifies it all, helping businesses save time, reduce errors, and stay ahead.
             </motion.p>
           </div>
         </Section>
 
-        {/* What We Do Section */}
-        <Section>
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-3">What You Can Do With Kleanr</h2>
-              <p className="text-gray-600 text-base">Simple tools to make running your laundry business easier than ever.</p>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-              <GlassCard icon={Database} title="Track Every Order" description="See all your orders in one place — sorted by status, completion date, or customer name." />
-              <GlassCard icon={BarChart} title="Understand Your Business" description="View key insights like busiest days, top customers, and total revenue in clean charts." />
-              <GlassCard icon={Zap} title="Instant Notifications" description="Keep customers updated with ready-for-pickup alerts or delivery reminders automatically." />
-              <GlassCard icon={Cloud} title="Accessible Anywhere" description="Log in from your phone, tablet, or laptop — your data stays synced across all devices." />
-              <GlassCard icon={Users} title="Customer Profiles" description="Save preferences and order history so you can serve returning customers faster." />
-              <GlassCard icon={ShieldCheck} title="Safe & Secure" description="Your data is protected with enterprise-level encryption and secure payment options." />
-            </div>
-          </div>
-        </Section>
-
-        {/* Call to Action Section */}
-        <Section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center rounded-t-[3rem] shadow-inner">
-          <div className="container mx-auto px-6 max-w-3xl">
+        {/* Our Values Section */}
+        <Section className="bg-gradient-to-b from-blue-50 to-white">
+          <div className="container mx-auto px-6 text-center max-w-4xl">
             <motion.h2
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
-              className="text-3xl sm:text-4xl font-bold mb-4 leading-tight"
+              className="text-3xl sm:text-4xl font-bold text-gray-900 mb-5"
             >
-              Ready to Take Your Business to the Next Level?
+              Our Core Values
             </motion.h2>
-            <p className="text-blue-100 mb-6 text-base sm:text-lg">
-              Join hundreds of businesses that have simplified their operations and boosted their growth.
-            </p>
-            <button className="px-8 py-3 bg-white text-blue-700 rounded-full text-base font-semibold hover:bg-blue-50 transition inline-flex items-center gap-2">
-              Get Started Now <CheckCircle className="w-5 h-5" />
-            </button>
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              custom={1}
+              className="text-gray-600 text-lg sm:text-xl leading-relaxed"
+            >
+              At Kleanr, we are driven by values that put both our users and our community at the heart of everything we do. 
+              Transparency, security, innovation, and a relentless pursuit of simplicity are key pillars that guide us in 
+              developing products that matter. We aim to empower businesses to operate smarter and more efficiently, while 
+              providing an intuitive, user-friendly experience for all.
+            </motion.p>
           </div>
         </Section>
+
+        {/* Team Section */}
+        <Section>
+          <div className="container mx-auto px-6 text-center max-w-4xl">
+            <motion.h2
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              className="text-3xl sm:text-4xl font-bold text-gray-900 mb-5"
+            >
+              Meet the Team
+            </motion.h2>
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              custom={1}
+              className="text-gray-600 text-lg sm:text-xl leading-relaxed"
+            >
+              Our team is united by one goal: to streamline dry cleaning operations. With diverse skills and a passion for 
+              innovation, we work together to make every aspect of your business more efficient.
+            </motion.p>
+            {
+              <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              custom={2}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10"
+              >
+                <TeamMemberCard
+                name="Legasse Remon"
+                role="Scrum Master (Full Stack) and Back-End Developer"
+                />
+                <TeamMemberCard
+                name="David-Benjamin Ogilvie"
+                role="Product Owner and Front-End Developer"
+                />
+                <TeamMemberCard
+                name="Daniel Lipszyc"
+                role="Lead Front-End Developer"
+                />
+                <TeamMemberCard
+                name="Hong Ouyang"
+                role="Front-End Developer"
+                />
+              </motion.div>
+
+          }
+          </div>
+        </Section>
+
         {/* FAQ Section */}
         <FAQ />
       </main>
@@ -198,7 +243,7 @@ export default function About() {
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold">
-              Y
+              K
             </div>
             <span className="text-xl font-bold">Kleanr</span>
           </div>
