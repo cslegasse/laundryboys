@@ -49,8 +49,7 @@ const GradientText = ({ children }: { children: React.ReactNode }) => (
 
 export default function Home() {
   const { userId, getToken } = useAuth();
-  const { user } = useUser(); // gives access to Clerk user object
-
+  const { user } = useUser();
   useEffect(() => {
     async function syncUser() {
       if (!userId || !user) return;
