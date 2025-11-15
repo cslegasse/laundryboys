@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import {
@@ -12,6 +11,7 @@ import {
 import "./globals.css";
 import Navbar from "@/components/NavBar";
 import MarqueeBar from "@/components/MarqueeBar";
+import SyncUser from "@/components/SyncUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +34,7 @@ export default function RootLayout({
         >
           <Navbar />
           <MarqueeBar />
+          <SyncUser/>
           <main>{children}</main>
         </body>
       </html>
