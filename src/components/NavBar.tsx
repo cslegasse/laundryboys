@@ -21,9 +21,8 @@ export default function Navbar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 w-full glass-card border-b border-white/20 z-50 shadow-lg"
+      className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50 shadow-lg"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
       
       <div className="relative container mx-auto px-6 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-3 group">
@@ -72,7 +71,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className="md:hidden p-2 text-gray-700 hover:text-purple-600 transition-colors rounded-lg hover:bg-white/50"
+          className="md:hidden p-2 text-gray-700 hover:text-purple-600 transition-colors rounded-lg hover:bg-gray-100"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -85,9 +84,8 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-full left-0 w-full glass-card border-t border-white/20 shadow-2xl flex flex-col md:hidden"
+              className="absolute top-full left-0 w-full bg-white/95 border-t border-gray-200 shadow-2xl flex flex-col md:hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-purple-500/5 pointer-events-none" />
               
               <div className="relative">
                 {navItems.map((item, index) => (
@@ -100,14 +98,14 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="block px-6 py-4 border-b border-white/10 text-gray-700 hover:text-purple-600 hover:bg-white/30 transition-all font-semibold"
+                      className="block px-6 py-4 border-b border-gray-100 text-gray-700 hover:text-purple-600 hover:bg-gray-100 transition-all font-semibold"
                     >
                       {item.label}
                     </Link>
                   </motion.div>
                 ))}
                 
-                <div className="p-6 bg-gradient-to-br from-white/50 to-purple-50/50">
+                <div className="p-6 bg-white">
                   <SignedOut>
                     <div className="flex flex-col gap-3">
                       <SignInButton mode="modal">

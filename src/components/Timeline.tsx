@@ -16,8 +16,8 @@ export default function TimelineEvent({ year, title, description, isLast = false
       </div>
       
       <div className="pb-12">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
+        <h3 className="text-xl font-semibold text-gray-300 mb-2">{title}</h3>
+        <p className="text-gray-300 leading-relaxed">{description}</p>
       </div>
     </div>
   );
