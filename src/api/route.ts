@@ -1,6 +1,6 @@
 import { jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabase, supabaseAdmin } from "../supabase-server";
+import { createServerSupabase, supabaseAdmin } from "./sync-user/supabase-server";
 
 export async function POST(request: NextRequest) {
   const authHeader = request.headers.get("Authorization") || "";
