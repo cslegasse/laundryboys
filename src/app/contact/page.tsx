@@ -62,7 +62,7 @@ export default function ContactSection() {
             transition={{ delay: 0.2 }}
             className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight"
           >
-            Let's Start a
+            Lets Start a
             <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Conversation
             </span>
@@ -100,7 +100,7 @@ export default function ContactSection() {
                   </div>
                   
                   <p className="text-gray-300 mb-8 text-lg leading-relaxed">
-                    Fill out the form, and our team will get back to you within 24 hours. We're excited to help you modernize your business!
+                    Fill out the form, and our team will get back to you within 24 hours. Wesre excited to help you modernize your business!
                   </p>
                   
                   <div className="space-y-6">
@@ -143,7 +143,7 @@ export default function ContactSection() {
 
                   <div className="mt-10 pt-10 border-t border-white/10">
                     <p className="text-gray-400 text-sm italic">
-                      "Kleanr transformed how we manage our business. Setup was easy and support was amazing!" 
+                      Kleanr transformed how we manage our business. Setup was easy and support was amazing.
                       <span className="block mt-2 text-purple-400 font-semibold">— Claudia A, S&S Dry Cleaners</span>
                     </p>
                   </div>

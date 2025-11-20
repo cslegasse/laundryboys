@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
-import { supabaseAdmin } from "@/app/api/supabase-server";
+import { createSupabaseAdmin } from "@/app/api/supabase-server";
+const supabaseAdmin = createSupabaseAdmin();
+const { data, error } = await supabaseAdmin.from("orders").select("*");
 
 export async function GET(request: NextRequest) {
   const { userId } = getAuth(request);

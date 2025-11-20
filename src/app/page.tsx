@@ -151,7 +151,7 @@ export default function Home() {
               custom={1}
               className="text-gray-300 leading-relaxed text-lg sm:text-xl"
             >
-              No misplaced tickets or spreadsheets. Use Kleanr's dashboard for everything in one place.
+              No misplaced tickets or spreadsheets. Use Kleanr dashboard for everything in one place.
             </motion.p>
           </div>
         </Section>

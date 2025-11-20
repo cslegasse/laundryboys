@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { LucideIcon, Users, ShieldCheck, BarChart, Database, Zap, Cloud, Sparkles, Target, Heart } from "lucide-react";
+import { LucideIcon, Sparkles, Target, Heart } from "lucide-react";
 import FAQ from "@/app/components/FAQ";
 import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
@@ -17,33 +17,6 @@ const fadeUp: Variants = {
     transition: { delay: custom * 0.15, duration: 0.5, ease: "easeOut" },
   }),
 };
-
-// Modern GlassCard Component with enhanced styling
-function GlassCard({
-  icon: Icon,
-  title,
-  description,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -5 }}
-      className="group relative p-6 glass-card rounded-2xl shadow-sm hover:glass-card-hover hover:glow-blue transition-all duration-300"
-    >
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      <div className="relative">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-blue-purple text-white rounded-xl mb-4 group-hover:rotate-6 transition-transform duration-300">
-          <Icon className="w-7 h-7" />
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
-      </div>
-    </motion.div>
-  );
-}
 
 // Section Layout
 const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -247,7 +220,7 @@ export default function About() {
               <Timeline
                 year="Now"
                 title="Growing With You"
-                description="We're continuously adding new features like payment processing and delivery management, all based on feedback from owners just like you."
+                description="Were continuously adding new features like payment processing and delivery management, all based on feedback from owners just like you."
                 isLast
               />
             </div>
@@ -291,7 +264,7 @@ export default function About() {
               <ValueCard
                 icon={Sparkles}
                 title="Simplicity Matters"
-                description="Complex doesn't mean better. We create powerful tools that are intuitive and easy to use from day one."
+                description="Complex doesnt mean better. We create powerful tools that are intuitive and easy to use from day one."
               />
             </div>
           </div>
@@ -370,7 +343,7 @@ export default function About() {
                   Ready to Transform Your Business?
                 </motion.h2>
                 <p className="text-gray-300 mb-8 text-lg">
-                  Join hundreds of dry cleaners who've already modernized their operations with Kleanr.
+                  Join hundreds of dry cleaners already modernized their operations with Kleanr.
                 </p>
                 <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
                   Get Started Today
@@ -392,7 +365,7 @@ export default function About() {
             <span className="text-2xl font-black text-white">Kleanr</span>
           </div>
           <p className="text-gray-400 text-base">
-            © {new Date().getFullYear()} Kleanr. Smarter local laundry.
+            {new Date().getFullYear()} Kleanr. Smarter local laundry.
           </p>
         </div>
       </footer>

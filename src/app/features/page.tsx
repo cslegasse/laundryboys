@@ -175,7 +175,7 @@ export default function LaundryBoysFeatures() {
               Ready to Modernize?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join forward-thinking dry cleaners who've already ditched the paper and doubled their efficiency
+              Join dry cleaners whove already ditched the paper and doubled their efficiency
             </p>
             <button className="px-10 py-5 bg-white text-purple-600 font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl text-lg">
               Start Your Free Trial
