@@ -89,7 +89,7 @@ export default function About() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <main className="flex-grow pt-12">
-        <Section className="relative text-center overflow-hidden">
+        <Section className="relative text-center">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2aDRWMTBoLTR2Nk0yMCAzNmg0djZoLTR2LTZNMzYgMzZoNHY2aC00di02Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
           
           <div className="absolute -top-20 left-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-blob"></div>
@@ -292,7 +292,7 @@ export default function About() {
         </Section>
 
         {/* CTA Section */}
-        <Section className="relative overflow-hidden">
+        <Section className="relative">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float"></div>
           <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float animation-delay-2000"></div>
