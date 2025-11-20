@@ -18,33 +18,6 @@ const fadeUp: Variants = {
   }),
 };
 
-// Modern GlassCard Component with enhanced styling
-function GlassCard({
-  icon: Icon,
-  title,
-  description,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -5 }}
-      className="group relative p-6 glass-card rounded-2xl shadow-sm hover:glass-card-hover hover:glow-blue transition-all duration-300"
-    >
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      <div className="relative">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-blue-purple text-white rounded-xl mb-4 group-hover:rotate-6 transition-transform duration-300">
-          <Icon className="w-7 h-7" />
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
-      </div>
-    </motion.div>
-  );
-}
-
 // Section Layout
 const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <section className={`py-16 sm:py-20 ${className}`}>{children}</section>

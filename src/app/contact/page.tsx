@@ -143,7 +143,7 @@ export default function ContactSection() {
 
                   <div className="mt-10 pt-10 border-t border-white/10">
                     <p className="text-gray-400 text-sm italic">
-                      "Kleanr transformed how we manage our business. Setup was easy and support was amazing!" 
+                      Kleanr transformed how we manage our business. Setup was easy and support was amazing!
                       <span className="block mt-2 text-purple-400 font-semibold">— Claudia A, S&S Dry Cleaners</span>
                     </p>
                   </div>
