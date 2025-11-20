@@ -2,11 +2,11 @@
 
 import { motion, Variants } from "framer-motion";
 import { LucideIcon, Users, ShieldCheck, BarChart, Database, Zap, Cloud, Sparkles, Target, Heart } from "lucide-react";
-import FAQ from "@/components/FAQ";
+import FAQ from "@/app/components/FAQ";
 import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import Timeline from "@/components/Timeline"
+import Timeline from "@/app/components/Timeline"
 
 // Animation Variants
 const fadeUp: Variants = {

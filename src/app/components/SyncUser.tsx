@@ -16,7 +16,7 @@ export default function SyncUser() {
 
       try {
         await axios.post(
-          "api/sync-user",
+          "/api/sync-user",
           {
             email: user.primaryEmailAddress?.emailAddress,
             role: "customer",
