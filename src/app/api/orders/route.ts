@@ -1,10 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
 
+type OrderItem = { service: string; qty: number; label: string };
+
+
 export async function GET(req: Request) {
   try {
-    const { userId } = getAuth(req as any);
+    const { userId } = getAuth(req as unknown as NextRequest);
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const supabaseAdmin = createSupabaseAdmin();
@@ -28,13 +31,13 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = getAuth(req as any);
+    const { userId } = getAuth(req as unknown as NextRequest);
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const body = await req.json();
-    const items = body.items || [];
-    const total = body.total || 0;
-    const estimated_minutes = body.estimated_minutes || 0;
+    const body = (await req.json()) as { items?: OrderItem[]; total?: number; estimated_minutes?: number; company?: string | null };
+    const items = body.items ?? [];
+    const total = body.total ?? 0;
+    const estimated_minutes = body.estimated_minutes ?? 0;
     const company = body.company ?? null;
 
     const supabaseAdmin = createSupabaseAdmin();
@@ -54,7 +57,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
     }
 
-    return NextResponse.json({ order: data?.[0] });
+    return NextResponse.json({ order: (data?.[0] ?? null) as Record<string, unknown> | null });
   } catch (err) {
     console.error("/api/orders POST error", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

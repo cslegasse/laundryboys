@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
 
 export async function GET(req: Request) {
   try {
-    const { userId } = getAuth(req as any);
+    const { userId } = getAuth(req as unknown as NextRequest);
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const supabaseAdmin = createSupabaseAdmin();

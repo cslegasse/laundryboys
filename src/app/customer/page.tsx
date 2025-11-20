@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useAuth, SignInButton } from "@clerk/nextjs";
 
 type ServiceKey = "wash_dry" | "dry_clean" | "press" | "fold";
@@ -14,7 +14,7 @@ const SERVICES: Record<ServiceKey, { label: string; baseDays: number; price: num
 };
 
 export default function CustomerOrdersPage() {
-  const { isSignedIn, userId } = useAuth();
+  const { isSignedIn /*, userId */ } = useAuth();
 
   const [quantities, setQuantities] = useState<Record<ServiceKey, number>>({
     wash_dry: 0,
@@ -23,10 +23,21 @@ export default function CustomerOrdersPage() {
     fold: 0,
   });
 
-  const [orders, setOrders] = useState<any[]>([]);
+  type OrderItem = { service: ServiceKey | string; qty: number; label: string };
+  type OrderRecord = {
+    id: number | string;
+    created_at?: string;
+    total?: number;
+    items?: OrderItem[];
+    status?: string;
+    company?: string | null;
+    estimated_minutes?: number | null;
+  };
+
+  const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   // New UI state for the order creator + cart
   const [scheduledDate, setScheduledDate] = useState<string>(() => {
     const d = new Date();
@@ -36,14 +47,12 @@ export default function CustomerOrdersPage() {
   // company for whom the order is being placed (optional but stored)
   const [company, setCompany] = useState<string>("");
 
-  type CartItem = { id: string; date: string; items: Array<{ service: ServiceKey; qty: number; label: string }>; total: number; estimated_days?: number; estimated_minutes?: number; status: "unpaid" | "paid" };
+  type CartItem = { id: string; date: string; items: Array<{ service: ServiceKey; qty: number; label: string }>; total: number; estimated_days?: number; estimated_minutes?: number; status: "unpaid" | "paid"; company?: string | null };
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    fetchOrders();
-  }, [isSignedIn]);
-
-  async function fetchOrders() {
+   
+   
+  const fetchOrders = useCallback(async () => {
     if (!isSignedIn) return;
     setLoadingOrders(true);
     try {
@@ -57,9 +66,17 @@ export default function CustomerOrdersPage() {
     } finally {
       setLoadingOrders(false);
     }
-  }
+  }, [isSignedIn]);
 
-  async function createOrderBackend(items: any[], total: number, estimated_minutes: number) {
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  // async function fetchOrders() {
+  // }
+
+  /*
+  async function createOrderBackend(items: OrderItem[], total: number, estimated_minutes: number) {
     // create order on backend (this was the previous flow)
     try {
       const res = await fetch("/api/orders", {
@@ -78,6 +95,7 @@ export default function CustomerOrdersPage() {
       throw err;
     }
   }
+  */
 
   // Estimate in days (services can be done concurrently: take the max per-service baseDays)
   const estimateDays = useMemo(() => {
@@ -118,6 +136,7 @@ export default function CustomerOrdersPage() {
     setError(null);
   }
 
+  /*
   function estimatedCompletionFromDate(dateISO: string, days: number) {
     if (!dateISO || !days) return "—";
     const scheduled = new Date(dateISO);
@@ -125,7 +144,9 @@ export default function CustomerOrdersPage() {
     then.setDate(then.getDate() + days);
     return then.toLocaleDateString();
   }
+  */
 
+  /*
   async function handlePlaceOrder() {
     setError(null);
     if (!isSignedIn) {
@@ -163,6 +184,7 @@ export default function CustomerOrdersPage() {
       setSubmitting(false);
     }
   }
+  */
 
   // Confirm from the creator: adds a cart item (unpaid). Placeholder for checkout integration.
   function handleConfirmToCart() {
@@ -184,14 +206,13 @@ export default function CustomerOrdersPage() {
   else if (totalUnits >= 5) estDays = Math.max(estDays, 5);
   const estimated_minutes = estDays * 24 * 60;
   const id = `cart_${Date.now()}`;
-  const newItem: CartItem = { id, date: scheduledDate, items, total, estimated_days: estDays, estimated_minutes, status: "unpaid" };
-  // attach company to the cart item for later storage
-  (newItem as any).company = company ?? null;
+  const newItem: CartItem = { id, date: scheduledDate, items, total, estimated_days: estDays, estimated_minutes, status: "unpaid", company: company ?? null };
     setCartItems(prev => [newItem, ...prev]);
     resetCreator();
   }
 
   // Placeholder pay flow: mark as paid and create backend order (for now this stands in for Stripe)
+  /*
   async function handlePay(cartId: string) {
     const ci = cartItems.find(c => c.id === cartId);
     if (!ci) return;
@@ -207,6 +228,7 @@ export default function CustomerOrdersPage() {
       setSubmitting(false);
     }
   }
+  */
 
   // Global pay: process all unpaid cart items (placeholder for Stripe checkout)
   // New Pay All: forward unpaid cart items to a checkout-stub API which returns a redirect URL
@@ -220,8 +242,8 @@ export default function CustomerOrdersPage() {
     try {
       setSubmitting(true);
       // Prepare payload: send unpaid cart items to the stub endpoint
-      // Ensure company is present on cart items (if set in creator)
-      const cartToSend = unpaid.map(c => ({ ...c, company: (c as any).company ?? company ?? null }));
+  // Ensure company is present on cart items (if set in creator)
+  const cartToSend: CartItem[] = unpaid.map(c => ({ ...c, company: c.company ?? company ?? null }));
       const res = await fetch("/api/checkout-stub", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -394,7 +416,7 @@ export default function CustomerOrdersPage() {
                   <div className="flex justify-between">
                     <div>
                       <p className="font-semibold">Order #{o.id}</p>
-                      <p className="text-sm text-gray-200">Placed: {new Date(o.created_at).toLocaleString()}</p>
+                      <p className="text-sm text-gray-200">Placed: {o.created_at ? new Date(o.created_at).toLocaleString() : '—'}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">${o.total?.toFixed?.(2) ?? o.total}</p>
@@ -404,7 +426,7 @@ export default function CustomerOrdersPage() {
                   <div className="mt-2 text-sm text-gray-200">
                     <strong>Items:</strong>
                     <ul className="list-disc ml-6">
-                      {(o.items || []).map((it: any, i: number) => (
+                      {(o.items || []).map((it: OrderItem, i: number) => (
                         <li key={i}>{it.label} — {it.qty} pcs</li>
                       ))}
                     </ul>

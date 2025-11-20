@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
 const supabaseAdmin = createSupabaseAdmin();
-const { data, error } = await supabaseAdmin.from("orders").select("*");
+// NOTE: previously an initial fetch was performed here but the returned
+// values were unused which caused lint warnings. Keep the client ready
+// for use inside the handler.
+// const { data, error } = await supabaseAdmin.from("orders").select("*");
 
 export async function GET(request: NextRequest) {
   const { userId } = getAuth(request);

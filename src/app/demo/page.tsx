@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useAuth, useUser, SignInButton } from "@clerk/nextjs";
+import { /*useSearchParams,*/ useRouter } from "next/navigation";
+import { useAuth, /*useUser,*/ SignInButton } from "@clerk/nextjs";
 
 export default function DemoLanding() {
-  const searchParams = useSearchParams();
-  const from = searchParams?.get("from");
+  // const searchParams = useSearchParams();
+  // const from = searchParams?.get("from");
   const router = useRouter();
 
   const { isSignedIn, userId, getToken } = useAuth();
-  const { user } = useUser();
+  // const { user } = useUser();
 
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);

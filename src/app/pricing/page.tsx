@@ -21,7 +21,7 @@ const Section = ({ children, className = "" }: { children: React.ReactNode; clas
 
 export default function PricingPage() {
   const [loading, setLoading] = useState(false);
-  const price = 14.99;
+  // const price = 14.99; // kept for future use
 
   const handleSubscribe = async () => {
     try {

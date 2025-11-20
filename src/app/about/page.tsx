@@ -3,9 +3,9 @@
 import { motion, Variants } from "framer-motion";
 import { LucideIcon, Sparkles, Target, Heart } from "lucide-react";
 import FAQ from "@/app/components/FAQ";
-import { useEffect } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
-import axios from "axios";
+// import { useEffect } from "react";
+// import { useAuth, useUser } from "@clerk/nextjs";
+// import axios from "axios";
 import Timeline from "@/app/components/Timeline"
 
 // Animation Variants
