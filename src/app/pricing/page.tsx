@@ -61,7 +61,7 @@ export default function PricingPage() {
               custom={1}
               className="mt-6 text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
             >
-              Choose the plan that's right for your business. No hidden fees, no contracts, and you can cancel anytime.
+              Choose the plan thats right for your business. No hidden fees, no contracts, and you can cancel anytime.
             </motion.p>
           </div>
         </Section>
@@ -211,7 +211,7 @@ export default function PricingPage() {
                   Ready to Get Started?
                 </h2>
                 <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                  Join hundreds of dry cleaners who've already transformed their operations
+                  Join hundreds of dry cleaners whove already transformed their operations
                 </p>
                 <button className="px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
                   Start Free Trial

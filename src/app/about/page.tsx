@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { LucideIcon, Users, ShieldCheck, BarChart, Database, Zap, Cloud, Sparkles, Target, Heart } from "lucide-react";
+import { LucideIcon, Sparkles, Target, Heart } from "lucide-react";
 import FAQ from "@/app/components/FAQ";
 import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";

@@ -35,8 +35,11 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("JWT verification or DB error:", err);
-    return NextResponse.json({ error: err.message || "Invalid token or database error" }, { status: 401 });
+    } catch (error) {
+    if (error instanceof Error) {
+      console.error('Error:', error.message);
+    } else {
+      console.error('Unknown error:', error);
+    }
   }
 }
