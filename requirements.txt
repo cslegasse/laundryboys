@@ -6,4 +6,5 @@ uvicorn>=0.23
 pytest>=8.0
 httpx>=0.24
 starlette>=0.28
-stripe >= 5.0.0
+stripe>=5.0.0
+supabase
