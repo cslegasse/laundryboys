@@ -4,7 +4,7 @@ import {ClerkProvider} from "@clerk/nextjs";
 import "./globals.css";
 import Navbar from "@/app/components/NavBar";
 import MarqueeBar from "@/app/components/MarqueeBar";
-import SyncUser from "@/app/components/SyncUser";
+import UserOnboarding from "@/app/components/SyncUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
