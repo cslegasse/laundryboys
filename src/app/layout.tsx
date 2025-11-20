@@ -1,17 +1,10 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import {ClerkProvider} from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/components/NavBar";
-import MarqueeBar from "@/components/MarqueeBar";
+import Navbar from "@/app/components/NavBar";
+import MarqueeBar from "@/app/components/MarqueeBar";
+import SyncUser from "@/app/components/SyncUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +27,7 @@ export default function RootLayout({
         >
           <Navbar />
           <MarqueeBar />
+          <SyncUser/>
           <main>{children}</main>
         </body>
       </html>
