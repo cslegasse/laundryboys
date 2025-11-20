@@ -1,22 +1,28 @@
 "use server";
 
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
-import { auth } from "@clerk/nextjs/server";
-import { randomUUID } from "crypto"; 
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { randomUUID } from "crypto";
 
 type OnboardingData = {
   name: string;
   location: string;
-  role: "customer" | "admin";
+  role: "customer" | "admin"; 
   companyName?: string;
 };
 
 export async function completeOnboarding(data: OnboardingData) {
-  const { userId, sessionClaims } = await auth();
-  const email = sessionClaims?.email as string;
+  const { userId } = await auth();
+  const user = await currentUser();
 
-  if (!userId || !email) {
-    return { error: "Unauthorized or email not found." };
+  if (!userId || !user) {
+    return { error: "Unauthorized: User not found." };
+  }
+
+  const email = user.primaryEmailAddress?.emailAddress;
+
+  if (!email) {
+    return { error: "Unauthorized: User email not found." };
   }
 
   const { name, location, role, companyName } = data;
@@ -47,7 +53,7 @@ export async function completeOnboarding(data: OnboardingData) {
     if (!companyName) {
       return { error: "Company name is required." };
     }
-    
+
     const { error: customerError } = await supabaseAdmin
       .from("customers")
       .upsert({
@@ -70,7 +76,7 @@ export async function completeOnboarding(data: OnboardingData) {
         id: companyId,
         name: companyName,
         location,
-        email: email, 
+        email: email,
         owner_id: userId,
       });
 
@@ -83,7 +89,7 @@ export async function completeOnboarding(data: OnboardingData) {
       .from("customers")
       .update({ company_id: companyId })
       .eq("id", userId);
-    
+
     if (updateError) {
       console.error("Error linking company to user:", updateError);
       return { error: updateError.message };
