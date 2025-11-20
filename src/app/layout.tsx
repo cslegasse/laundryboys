@@ -27,7 +27,7 @@ export default function RootLayout({
         >
           <Navbar />
           <MarqueeBar />
-          <UserOnboarding /> {/* CHANGED */}
+          <UserOnboarding />
           <main>{children}</main>
         </body>
       </html>

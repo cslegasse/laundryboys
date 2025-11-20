@@ -65,6 +65,12 @@ export default function Navbar() {
             </SignedOut>
             <SignedIn>
               <div className="flex items-center gap-2">
+                <Link
+                  href="/admin"
+                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+                >
+                  Dashboard
+                </Link>
                 <UserButton afterSignOutUrl="/" />
               </div>
             </SignedIn>
@@ -106,6 +112,22 @@ export default function Navbar() {
                     </Link>
                   </motion.div>
                 ))}
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navItems.length * 0.1 }}
+                >
+                  <SignedIn>
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsOpen(false)}
+                      className="block px-6 py-4 border-b border-white/10 text-gray-700 hover:text-purple-600 hover:bg-white/30 transition-all font-semibold bg-gradient-to-r from-blue-500/10 to-purple-600/10"
+                    >
+                      Dashboard
+                    </Link>
+                  </SignedIn>
+                </motion.div>
                 
                 <div className="p-6 bg-gradient-to-br from-white/50 to-purple-50/50">
                   <SignedOut>
