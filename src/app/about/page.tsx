@@ -220,7 +220,7 @@ export default function About() {
               <Timeline
                 year="Now"
                 title="Growing With You"
-                description="We're continuously adding new features like payment processing and delivery management, all based on feedback from owners just like you."
+                description="Were continuously adding new features like payment processing and delivery management, all based on feedback from owners just like you."
                 isLast
               />
             </div>
@@ -264,7 +264,7 @@ export default function About() {
               <ValueCard
                 icon={Sparkles}
                 title="Simplicity Matters"
-                description="Complex doesn't mean better. We create powerful tools that are intuitive and easy to use from day one."
+                description="Complex doesnt mean better. We create powerful tools that are intuitive and easy to use from day one."
               />
             </div>
           </div>
@@ -343,7 +343,7 @@ export default function About() {
                   Ready to Transform Your Business?
                 </motion.h2>
                 <p className="text-gray-300 mb-8 text-lg">
-                  Join hundreds of dry cleaners who've already modernized their operations with Kleanr.
+                  Join hundreds of dry cleaners already modernized their operations with Kleanr.
                 </p>
                 <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
                   Get Started Today
@@ -365,7 +365,7 @@ export default function About() {
             <span className="text-2xl font-black text-white">Kleanr</span>
           </div>
           <p className="text-gray-400 text-base">
-            © {new Date().getFullYear()} Kleanr. Smarter local laundry.
+            {new Date().getFullYear()} Kleanr. Smarter local laundry.
           </p>
         </div>
       </footer>
