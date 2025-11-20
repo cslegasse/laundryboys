@@ -28,6 +28,8 @@ export default function RootLayout({
           <Navbar />
           <MarqueeBar />
           <SyncUser/>
+         <MarqueeBar />
+          <SyncUser/>
           <main>{children}</main>
         </body>
       </html>
