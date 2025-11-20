@@ -9,9 +9,9 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/components/NavBar";
-import MarqueeBar from "@/components/MarqueeBar";
-import SyncUser from "@/components/SyncUser";
+import Navbar from "@/app/components/NavBar";
+import MarqueeBar from "@/app/components/MarqueeBar";
+import SyncUser from "@/app/components/SyncUser";
 
 const inter = Inter({ subsets: ["latin"] });
 

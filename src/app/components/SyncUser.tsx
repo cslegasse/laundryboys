@@ -12,7 +12,7 @@ export default function SyncUser() {
     async function syncUser() {
       if (!userId || !user) return;
 
-      const token = await getToken({ template: "base-sync" });
+      const token = await getToken({ template: "supabase" });
 
       try {
         await axios.post(
@@ -27,9 +27,9 @@ export default function SyncUser() {
             },
           }
         );
-        console.log("User synced");
+        console.log("User synced successfully");
       } catch (err) {
-        console.error("Error syncing:", err);
+        console.error("Error syncing user:", err);
       }
     }
 

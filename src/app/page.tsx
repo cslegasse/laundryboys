@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { LucideIcon, Zap, ShieldCheck, BarChart, Cloud, Database, Users, ArrowRight, Sparkles, CheckCircle } from "lucide-react";
-import FAQ from "@/components/FAQ"
+import FAQ from "@/app/components/FAQ"
 import Link from "next/link"
 
 const fadeUp: Variants = {

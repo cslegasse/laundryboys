@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
-import PricingTier from "@/components/PricingTier"; 
-import FAQ from "@/components/FAQ"; 
+import PricingTier from "@/app/components/PricingTier"; 
+import FAQ from "@/app/components/FAQ"; 
 import { Sparkles, Zap, TrendingUp } from "lucide-react";
 
 const fadeUp: Variants = {
