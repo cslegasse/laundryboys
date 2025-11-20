@@ -11,13 +11,15 @@ export default function PricingPage() {
   const handleSubscribe = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/checkout", {
+      const res = await fetch("http://localhost:8000/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || undefined,
+        }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Something went wrong");
+      if (!res.ok) throw new Error(data?.detail || data?.error || "Something went wrong");
       window.location.href = data.url;
     } catch (e) {
       alert((e as Error).message);
@@ -25,6 +27,7 @@ export default function PricingPage() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-blue-50">

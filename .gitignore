@@ -11,6 +11,13 @@
 !.yarn/releases
 !.yarn/versions
 
+
+# Ignore all environment files
+.env
+*.env
+**/.env
+
+
 # testing
 /coverage
 
