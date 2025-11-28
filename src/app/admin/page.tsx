@@ -133,15 +133,12 @@ export default function AdminDashboard() {
               animate="visible"
               className="text-5xl sm:text-6xl font-black text-white mb-6 leading-tight"
             >
-              Orders &
-              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Analytics
-              </span>
+              Orders & Analytics
             </motion.h1>
           </motion.div>
 
           {/* Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
             {[
               {
                 label: "Total Orders",
@@ -155,12 +152,7 @@ export default function AdminDashboard() {
                 icon: Clock,
                 gradient: "from-yellow-500 to-orange-500",
               },
-              {
-                label: "Completed",
-                value: completedOrders,
-                icon: CheckCircle,
-                gradient: "from-green-500 to-emerald-500",
-              },
+
               {
                 label: "Total Revenue",
                 value: `$${totalRevenue.toFixed(2)}`,
@@ -189,51 +181,6 @@ export default function AdminDashboard() {
               </motion.div>
             ))}
           </div>
-
-          {/* Daily Volume Chart */}
-          {dailyVolume.length > 0 && (
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={4}
-              className="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 mb-12 hover:bg-white/15 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-                  <TrendingUp className="w-6 h-6 text-blue-400" />
-                  Daily Order Volume
-                </h2>
-
-                <div className="flex items-end justify-between h-64 gap-2 px-2">
-                  {dailyVolume.length > 0 ? (
-                    dailyVolume.map((day, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ height: 0 }}
-                        animate={{ height: `${(day.count / maxVolume) * 100}%` }}
-                        transition={{ delay: idx * 0.05, duration: 0.5 }}
-                        className="flex-1 bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg hover:from-blue-400 hover:to-purple-400 transition-all duration-300 group/bar cursor-pointer relative"
-                        title={`${day.date}: ${day.count} orders`}
-                      >
-                        <div className="absolute inset-x-0 -top-8 flex justify-center opacity-0 group-hover/bar:opacity-100 transition-opacity duration-300">
-                          <span className="text-white text-sm font-semibold">{day.count}</span>
-                        </div>
-                        <div className="absolute inset-x-0 bottom-0 text-gray-300 text-xs font-semibold flex items-end justify-center pb-2 h-full text-center break-words px-1">
-                          {day.date}
-                        </div>
-                      </motion.div>
-                    ))
-                  ) : (
-                    <div className="w-full text-center text-gray-400">
-                      No data available
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
 
           {/* Orders Table */}
           {loading ? (
