@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Stripe from 'stripe';
 
 export default function CheckoutSuccessClient({ sessionId }: { sessionId: string | null }) {
   const router = useRouter();

@@ -42,8 +42,8 @@ export async function POST(req: Request) {
       const cart = JSON.parse(cartDataStr);
       const supabaseAdmin = createSupabaseAdmin();
 
-      // Create orders in database
-      const created: any[] = [];
+  // Create orders in database
+  const created: Array<Record<string, unknown>> = [];
       for (const ci of cart) {
         const items = ci.items || [];
         const total = ci.total || 0;
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
           return NextResponse.json({ error: "Failed to create orders" }, { status: 500 });
         }
 
-        created.push(data?.[0]);
+        created.push((data?.[0] ?? {}) as Record<string, unknown>);
       }
 
       console.log(`Successfully created ${created.length} orders for user ${userId}`);

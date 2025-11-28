@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import Stripe from "stripe";
+import { CartItem } from "@/app/api/checkout-stub/route";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-11-17.clover",
@@ -11,7 +12,7 @@ export async function POST(req: Request) {
     const { userId } = getAuth(req as unknown as NextRequest);
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const body = (await req.json()) as { cart?: any[] };
+  const body = (await req.json()) as { cart?: CartItem[] };
     const cart = body.cart ?? [];
 
     if (cart.length === 0) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
         currency: "usd",
         product_data: {
           name: `Laundry Order - ${new Date(item.date).toLocaleDateString()}`,
-          description: item.items.map((it: any) => `${it.qty}x ${it.label}`).join(", "),
+          description: item.items.map((it) => `${it.qty}x ${it.label}`).join(", "),
         },
         unit_amount: Math.round(item.total * 100), // Stripe uses cents
       },
