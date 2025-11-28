@@ -2,14 +2,20 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+function getStripeAndSecrets() {
+  const stripeSecret = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!stripeSecret || !webhookSecret) {
+    throw new Error("Missing Stripe configuration: STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET");
+  }
+  const stripe = new Stripe(stripeSecret, { apiVersion: "2025-11-17.clover" });
+  return { stripe, webhookSecret };
+}
 
 export async function POST(req: Request) {
   try {
+    // Initialize Stripe and secrets lazily at request time
+    const { stripe, webhookSecret } = getStripeAndSecrets();
     const body = await req.text();
     const signature = req.headers.get("stripe-signature");
 
