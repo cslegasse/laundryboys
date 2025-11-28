@@ -230,8 +230,7 @@ export default function CustomerOrdersPage() {
   }
   */
 
-  // Global pay: process all unpaid cart items (placeholder for Stripe checkout)
-  // New Pay All: forward unpaid cart items to a checkout-stub API which returns a redirect URL
+  // Global pay: process all unpaid cart items - redirect to Stripe Checkout
   async function handlePayAll() {
     const unpaid = cartItems.filter(c => c.status === "unpaid");
     if (unpaid.length === 0) {
@@ -241,10 +240,10 @@ export default function CustomerOrdersPage() {
 
     try {
       setSubmitting(true);
-      // Prepare payload: send unpaid cart items to the stub endpoint
-  // Ensure company is present on cart items (if set in creator)
-  const cartToSend: CartItem[] = unpaid.map(c => ({ ...c, company: c.company ?? company ?? null }));
-      const res = await fetch("/api/checkout-stub", {
+      // Prepare payload: send unpaid cart items to Stripe Checkout
+      // Ensure company is present on cart items (if set in creator)
+      const cartToSend: CartItem[] = unpaid.map(c => ({ ...c, company: c.company ?? company ?? null }));
+      const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: cartToSend }),
@@ -252,11 +251,11 @@ export default function CustomerOrdersPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Failed to start checkout");
 
-      // redirect user to the returned URL (stubbed checkout flow)
+      // redirect user to Stripe Checkout
       if (data.url) {
         window.location.href = data.url;
       } else {
-        throw new Error("No redirect URL returned from checkout stub");
+        throw new Error("No redirect URL returned from checkout");
       }
     } catch (err) {
       console.error(err);

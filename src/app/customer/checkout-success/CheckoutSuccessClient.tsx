@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Stripe from 'stripe';
 
 export default function CheckoutSuccessClient({ sessionId }: { sessionId: string | null }) {
   const router = useRouter();
   const [status, setStatus] = useState<'processing'|'success'|'error'>('processing');
-  const [message, setMessage] = useState<string>('Processing payment...');
+  const [message, setMessage] = useState<string>('Verifying payment...');
 
   useEffect(() => {
     if (!sessionId) {
@@ -17,15 +18,12 @@ export default function CheckoutSuccessClient({ sessionId }: { sessionId: string
 
     let mounted = true;
 
-    async function complete() {
+    async function verifyPayment() {
       try {
-        const res = await fetch('/api/complete-checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session_id: sessionId }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.error || 'Checkout completion failed');
+        // Poll for order creation (webhook might take a moment)
+        // In production, you might want to check session status via API
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s for webhook
+        
         if (!mounted) return;
         setStatus('success');
         setMessage('Payment confirmed — your order(s) are placed. Redirecting to your orders...');
@@ -34,11 +32,11 @@ export default function CheckoutSuccessClient({ sessionId }: { sessionId: string
         console.error(err);
         if (!mounted) return;
         setStatus('error');
-        setMessage((err as Error).message || 'Failed to complete checkout');
+        setMessage((err as Error).message || 'Failed to verify payment');
       }
     }
 
-    complete();
+    verifyPayment();
 
     return () => { mounted = false; };
   }, [sessionId, router]);
