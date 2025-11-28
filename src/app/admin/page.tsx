@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     async function fetchOrders() {
       try {
         setLoading(true);
-        const response = await axios.get<{ orders: Order[] }>("/admin/orders");
+        const response = await axios.get<{ orders: Order[] }>("/api/admin/orders");
         const fetchedOrders = response.data.orders;
         setOrders(fetchedOrders);
 
@@ -120,13 +120,6 @@ export default function AdminDashboard() {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <div className="inline-block mb-6 px-6 py-2 glass-card rounded-full">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-semibold flex items-center gap-2 justify-center">
-                <TrendingUp className="w-4 h-4 text-blue-400" />
-                Order Management
-              </span>
-            </div>
-
             <motion.h1
               variants={fadeUp}
               initial="hidden"
