@@ -3,9 +3,15 @@ import { getAuth } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 import { CartItem } from "@/app/api/checkout-stub/route";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
+let stripe: Stripe | undefined;
+function getStripe(): Stripe {
+  if (!stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("Missing STRIPE_SECRET_KEY");
+    stripe = new Stripe(key, { apiVersion: "2025-11-17.clover" });
+  }
+  return stripe;
+}
 
 export async function POST(req: Request) {
   try {
@@ -33,7 +39,7 @@ export async function POST(req: Request) {
     }));
 
     // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
