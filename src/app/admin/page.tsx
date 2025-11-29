@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     async function fetchOrders() {
       try {
         setLoading(true);
-        const response = await axios.get<{ orders: Order[] }>("/api/admin/orders");
+        const response = await axios.get<{ orders: Order[] }>("/admin/orders");
         const fetchedOrders = response.data.orders;
         setOrders(fetchedOrders);
 
@@ -74,7 +74,6 @@ export default function AdminDashboard() {
 
   const totalOrders = orders.length;
   const pendingOrders = orders.filter((o) => o.status === "pending").length;
-  const completedOrders = orders.filter((o) => o.status === "completed").length;
   const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
   const maxVolume = Math.max(...dailyVolume.map((d) => d.count), 1);
 
