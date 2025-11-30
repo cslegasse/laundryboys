@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import Link from "next/link";
 import { LucideIcon, Sparkles, Target, Heart } from "lucide-react";
 import FAQ from "@/app/components/FAQ";
 // import { useEffect } from "react";
@@ -178,15 +179,11 @@ export default function About() {
                 title="Aha!"
                 description="Our founder, visiting his local laundromat, saw the owner managing orders with a paper notebook and a calculator. He knew there had to be a better way."
               />
+
               <Timeline
-                year="2023"
-                title="Building the Core"
-                description="We partnered with 5 local laundry owners to build and refine the first version of Kleanr, focusing on order tracking and customer notifications."
-              />
-              <Timeline
-                year="2024"
+                year="2025"
                 title="Kleanr Launches"
-                description="After a year of testing and feedback, we launched Kleanr to the public, helping shops across the city save time and reduce errors."
+                description="After 4 months of testing and feedback, we launched Kleanr to the public."
               />
               <Timeline
                 year="Now"
@@ -316,9 +313,11 @@ export default function About() {
                 <p className="text-gray-300 mb-8 text-lg">
                   Join hundreds of dry cleaners already modernized their operations with Kleanr.
                 </p>
-                <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
-                  Get Started Today
-                </button>
+                <Link href="/pricing">
+                  <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
+                    Get Started Today
+                  </button>
+                </Link>
               </div>
             </motion.div>
           </div>

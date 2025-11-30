@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Database, BarChart, Zap, Cloud, Users, ShieldCheck, DollarSign, Bell, Clock, Smartphone, TrendingUp, Package } from 'lucide-react';
 
 type GlassCardProps = {
@@ -66,12 +67,11 @@ export default function LaundryBoysFeatures() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl">
-              Get Started Free
-            </button>
-            <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-xl hover:bg-white/20 transition-all duration-300">
-              Watch Demo
-            </button>
+            <Link href="/pricing">
+              <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl">
+                Get Started
+              </button>
+            </Link>
           </div>
         </div>
       </div>

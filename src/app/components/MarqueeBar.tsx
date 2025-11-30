@@ -11,7 +11,7 @@ export default function MarqueeBar() {
   ];
 
   return (
-    <div className="py-6 bg-blue-50 border-y border-blue-100 overflow-hidden">
+    <div className="relative z-40 pt-[96px] py-6 bg-blue-50 border-y border-blue-100 overflow-hidden">
       <Marquee gradient={false} speed={50}>
         {items.map(({ icon: Icon, text }, i) => (
           <div
