@@ -2,6 +2,7 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const faqs = [
   {
@@ -106,9 +107,11 @@ export default function FAQ() {
           className="mt-12 text-center"
         >
           <p className="text-gray-300 mb-4">Still have questions?</p>
-          <button className="px-8 py-3 bg-gradient-modern text-white rounded-xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
-            Contact Our Team
-          </button>
+          <Link href="/contact">
+            <button className="px-8 py-3 bg-gradient-modern text-white rounded-xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
+              Contact Our Team
+            </button>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import Link from "next/link";
 import { LucideIcon, Sparkles, Target, Heart } from "lucide-react";
 import FAQ from "@/app/components/FAQ";
 // import { useEffect } from "react";
@@ -312,9 +313,11 @@ export default function About() {
                 <p className="text-gray-300 mb-8 text-lg">
                   Join hundreds of dry cleaners already modernized their operations with Kleanr.
                 </p>
-                <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
-                  Get Started Today
-                </button>
+                <Link href="/pricing">
+                  <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
+                    Get Started Today
+                  </button>
+                </Link>
               </div>
             </motion.div>
           </div>
