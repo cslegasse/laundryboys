@@ -178,15 +178,11 @@ export default function About() {
                 title="Aha!"
                 description="Our founder, visiting his local laundromat, saw the owner managing orders with a paper notebook and a calculator. He knew there had to be a better way."
               />
+
               <Timeline
-                year="2023"
-                title="Building the Core"
-                description="We partnered with 5 local laundry owners to build and refine the first version of Kleanr, focusing on order tracking and customer notifications."
-              />
-              <Timeline
-                year="2024"
+                year="2025"
                 title="Kleanr Launches"
-                description="After a year of testing and feedback, we launched Kleanr to the public, helping shops across the city save time and reduce errors."
+                description="After 4 months of testing and feedback, we launched Kleanr to the public."
               />
               <Timeline
                 year="Now"
