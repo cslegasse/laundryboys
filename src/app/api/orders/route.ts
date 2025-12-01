@@ -9,6 +9,8 @@ export async function GET(req: Request) {
     const { userId } = getAuth(req as unknown as NextRequest);
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    console.log("Fetching orders for user:", userId);
+
     const supabaseAdmin = createSupabaseAdmin();
     const { data, error } = await supabaseAdmin
       .from("orders")
@@ -21,6 +23,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
     }
 
+    console.log("Found orders:", data?.length || 0);
     return NextResponse.json({ orders: data });
   } catch (err) {
     console.error("/api/orders GET error", err);

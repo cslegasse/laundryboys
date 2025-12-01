@@ -25,6 +25,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  console.log("Admin fetching orders:", {
+    userId,
+    adminCompanyId: profile.company_id
+  });
 
   const { data: orders, error: ordersError } = await supabaseAdmin
     .from("orders")
@@ -35,6 +39,8 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching orders:", ordersError);
     return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
   }
+
+  console.log("Admin orders found:", orders?.length || 0);
 
   return NextResponse.json({ orders });
 }

@@ -35,12 +35,19 @@ export async function POST(req: Request) {
       const userId = session.metadata?.userId;
       const cartDataStr = session.metadata?.cartData;
 
+      console.log("Webhook received checkout.session.completed:", {
+        userId,
+        hasCartData: !!cartDataStr,
+        sessionId: session.id
+      });
+
       if (!userId || !cartDataStr) {
         console.error("Missing userId or cartData in session metadata");
         return NextResponse.json({ error: "Invalid session metadata" }, { status: 400 });
       }
 
       const cart = JSON.parse(cartDataStr);
+      console.log("Parsed cart data:", { cartItemCount: cart.length });
       const supabaseAdmin = createSupabaseAdmin();
 
       // Get customer name
@@ -54,7 +61,7 @@ export async function POST(req: Request) {
       for (const ci of cart) {
         const items = ci.items || [];
         const total = ci.total || 0;
-        const estimated_minutes = ci.estimated_minutes || 0;
+        const estimated_days = ci.estimated_days || 0;
         const company_name = ci.company ?? null;
 
         // Look up company_id by company name
@@ -67,20 +74,27 @@ export async function POST(req: Request) {
             .single();
           
           company_id = company?.id || null;
+          console.log("Company lookup:", { company_name, company_id });
         }
+
+        console.log("Creating order:", {
+          user_id: userId,
+          company_name,
+          company_id,
+          total,
+          items_count: items.length
+        });
 
         const { data, error } = await supabaseAdmin.from("orders").insert([
           {
             user_id: userId,
-            customer_name: customer?.name || "Unknown Customer",
-            items,
-            total,
-            estimated_minutes,
-            company_name,
             company_id,
-            status: "paid",
-            stripe_payment_intent: session.payment_intent,
-            stripe_session_id: session.id,
+            company_name,
+            customer_name: customer?.name || "Unknown Customer",
+            status: "in_progress",
+            total,
+            items,
+            estimated_days,
           },
         ]).select();
 
@@ -88,6 +102,8 @@ export async function POST(req: Request) {
           console.error("Error creating order from webhook:", error);
           return NextResponse.json({ error: "Failed to create orders" }, { status: 500 });
         }
+
+        console.log("Order created successfully:", data?.[0]);
 
         created.push((data?.[0] ?? {}) as Record<string, unknown>);
       }

@@ -419,7 +419,19 @@ export default function CustomerOrdersPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">${o.total?.toFixed?.(2) ?? o.total}</p>
-                      <p className="text-sm text-gray-200">Status: {o.status}</p>
+                      <p className="text-sm text-gray-200">
+                        Status: <span className={`font-semibold ${
+                          o.status === 'completed' ? 'text-green-400' : 
+                          o.status === 'ready_for_pickup' ? 'text-yellow-400' : 
+                          o.status === 'in_progress' ? 'text-blue-400' : 
+                          'text-red-400'
+                        }`}>
+                          {o.status === 'in_progress' ? 'In Progress' : 
+                           o.status === 'ready_for_pickup' ? 'Ready for Pickup' : 
+                           o.status === 'completed' ? 'Completed' : 
+                           o.status}
+                        </span>
+                      </p>
                     </div>
                   </div>
                   <div className="mt-2 text-sm text-gray-200">
