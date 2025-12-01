@@ -33,23 +33,14 @@ export default function Navbar() {
   useEffect(() => {
     async function fetchUserRole() {
       if (!userId) {
-        console.log("No userId available yet");
         setLoadingRole(false);
         return;
       }
 
-      console.log("Fetching role for userId:", userId);
       try {
         const response = await fetch(`/api/user-profile?userId=${userId}`);
         const data = await response.json();
-        console.log("API Response:", data);
-        
-        if (response.ok) {
-          console.log("Fetched user role:", data.role);
-          setUserRole(data.role);
-        } else {
-          console.error("Failed to fetch user role:", response.status, data);
-        }
+        setUserRole(data.role);
       } catch (error) {
         console.error("Error fetching user role:", error);
       } finally {
@@ -58,6 +49,20 @@ export default function Navbar() {
     }
 
     fetchUserRole();
+    
+    // Poll for role updates every 2 seconds for the first 10 seconds
+    // This ensures the button appears immediately after onboarding completes
+    let pollCount = 0;
+    const pollInterval = setInterval(() => {
+      if (pollCount < 5) {
+        fetchUserRole();
+        pollCount++;
+      } else {
+        clearInterval(pollInterval);
+      }
+    }, 2000);
+
+    return () => clearInterval(pollInterval);
   }, [userId]);
 
   const navItems = [

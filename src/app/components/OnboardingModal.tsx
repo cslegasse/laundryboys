@@ -54,10 +54,8 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
         throw new Error(data.error || "Registration failed");
       }
 
-      // Refresh the page to update the UI after a small delay to ensure data is saved
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      // Refresh the page to update the UI
+      window.location.reload();
     } catch (err) {
       console.error("Registration error:", err);
       setError(err instanceof Error ? err.message : "Failed to register");
