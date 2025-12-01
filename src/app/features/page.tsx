@@ -66,13 +66,7 @@ export default function LaundryBoysFeatures() {
             Transform your dry-cleaning business with intelligent order management, real-time tracking, and seamless online payments
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/pricing">
-              <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl">
-                Get Started
-              </button>
-            </Link>
-          </div>
+          
         </div>
       </div>
 
@@ -177,9 +171,11 @@ export default function LaundryBoysFeatures() {
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Join dry cleaners whove already ditched the paper and doubled their efficiency
             </p>
-            <button className="px-10 py-5 bg-white text-purple-600 font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl text-lg">
-              Start Your Free Trial
-            </button>
+            <Link href="/pricing">
+              <button className="px-10 py-5 bg-white text-purple-600 font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-2xl text-lg">
+                Start Your Free Trial
+              </button>
+            </Link>
             <p className="text-white/80 mt-4 text-sm">
               No credit card required • Setup in under 10 minutes • Cancel anytime
             </p>
