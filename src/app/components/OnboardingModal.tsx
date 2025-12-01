@@ -15,6 +15,7 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
   const [step, setStep] = useState<"choose" | "customer" | "company">("choose");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   
   const [formData, setFormData] = useState({
     name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "",
@@ -54,11 +55,8 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
         throw new Error(data.error || "Registration failed");
       }
 
-      // Wait 1.5 seconds to ensure the profile is created before reloading
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Refresh the page to update the UI
-      window.location.reload();
+      // Show success state
+      setSuccess(true);
     } catch (err) {
       console.error("Registration error:", err);
       setError(err instanceof Error ? err.message : "Failed to register");
@@ -83,42 +81,72 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl" />
 
           <div className="relative p-8">
-            {/* Header */}
-            <div className="text-center mb-8">
+            {success ? (
+              // Success Screen
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-12"
               >
-                <Sparkles className="w-4 h-4 text-blue-400" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-semibold">
-                  Welcome to Kleanr
-                </span>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full mb-6"
+                >
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+                
+                <h2 className="text-3xl font-black text-white mb-3">Registration Complete!</h2>
+                <p className="text-gray-300 mb-8">Your account has been successfully created. Click OK to continue.</p>
+                
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all hover:scale-105"
+                >
+                  OK
+                </button>
               </motion.div>
-              
-              <h2 className="text-3xl sm:text-4xl font-black text-white mb-2">
-                {step === "choose" ? "Get Started" : step === "customer" ? "Customer Details" : "Company Setup"}
-              </h2>
-              <p className="text-gray-300">
-                {step === "choose" 
-                  ? "How would you like to use Kleanr?" 
-                  : "Tell us a bit about yourself"}
-              </p>
-            </div>
+            ) : (
+              <>
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full"
+                  >
+                    <Sparkles className="w-4 h-4 text-blue-400" />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-semibold">
+                      Welcome to Kleanr
+                    </span>
+                  </motion.div>
+                  
+                  <h2 className="text-3xl sm:text-4xl font-black text-white mb-2">
+                    {step === "choose" ? "Get Started" : step === "customer" ? "Customer Details" : "Company Setup"}
+                  </h2>
+                  <p className="text-gray-300">
+                    {step === "choose" 
+                      ? "How would you like to use Kleanr?" 
+                      : "Tell us a bit about yourself"}
+                  </p>
+                </div>
 
-            {/* Error Message */}
-            {error && (
-              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-sm">
-                {error}
-              </div>
-            )}
+                {/* Error Message */}
+                {error && (
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-sm">
+                    {error}
+                  </div>
+                )}
 
-            {/* Choose Role Step */}
-            {step === "choose" && (
-              <div className="grid sm:grid-cols-2 gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -4 }}
-                  whileTap={{ scale: 0.98 }}
+                {/* Choose Role Step */}
+                {step === "choose" && (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -4 }}
+                      whileTap={{ scale: 0.98 }}
                   onClick={() => setStep("customer")}
                   className="group relative p-6 bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl hover:bg-white/15 transition-all duration-300 text-left"
                 >
@@ -308,6 +336,8 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
                   </button>
                 </div>
               </motion.div>
+            )}
+              </>
             )}
           </div>
         </motion.div>
