@@ -4,11 +4,14 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
 
 export default function Navbar() {
+  const { userId } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loadingRole, setLoadingRole] = useState(true);
 
   useEffect(() => {
     const onScroll = () => {
@@ -26,6 +29,32 @@ export default function Navbar() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    async function fetchUserRole() {
+      if (!userId) {
+        setLoadingRole(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/user-profile?userId=${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched user role:", data.role);
+          setUserRole(data.role);
+        } else {
+          console.error("Failed to fetch user role:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+      } finally {
+        setLoadingRole(false);
+      }
+    }
+
+    fetchUserRole();
+  }, [userId]);
 
   const navItems = [
     { label: "About", href: "/about" },         
@@ -97,12 +126,14 @@ export default function Navbar() {
             </SignedOut>
             <SignedIn>
               <div className="flex items-center gap-2">
-                <Link
-                  href="/admin"
-                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
-                >
-                  Dashboard
-                </Link>
+                {!loadingRole && (
+                  <Link
+                    href={userRole === "admin" ? "/admin" : "/customer"}
+                    className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+                  >
+                    {userRole === "admin" ? "Dashboard" : "Orders"}
+                  </Link>
+                )}
                 <UserButton afterSignOutUrl="/" />
               </div>
             </SignedIn>
@@ -159,15 +190,17 @@ export default function Navbar() {
                   transition={{ delay: navItems.length * 0.1 }}
                 >
                   <SignedIn>
-                    <Link
-                      href="/admin"
-                      onClick={() => setIsOpen(false)}
-                      className={`block px-6 py-4 border-b border-white/10 transition-all font-semibold bg-gradient-to-r from-blue-500/10 to-purple-600/10 ${
-                        isScrolled ? "text-gray-800 hover:bg-gray-100" : "text-gray-700 hover:text-purple-600 hover:bg-white/30"
-                      }`}
-                    >
-                      Dashboard
-                    </Link>
+                    {!loadingRole && (
+                      <Link
+                        href={userRole === "admin" ? "/admin" : "/customer"}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-6 py-4 border-b border-white/10 transition-all font-semibold bg-gradient-to-r from-blue-500/10 to-purple-600/10 ${
+                          isScrolled ? "text-gray-800 hover:bg-gray-100" : "text-gray-700 hover:text-purple-600 hover:bg-white/30"
+                        }`}
+                      >
+                        {userRole === "admin" ? "Dashboard" : "Order"}
+                      </Link>
+                    )}
                   </SignedIn>
                 </motion.div>
                 
