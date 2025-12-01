@@ -33,18 +33,22 @@ export default function Navbar() {
   useEffect(() => {
     async function fetchUserRole() {
       if (!userId) {
+        console.log("No userId available yet");
         setLoadingRole(false);
         return;
       }
 
+      console.log("Fetching role for userId:", userId);
       try {
         const response = await fetch(`/api/user-profile?userId=${userId}`);
+        const data = await response.json();
+        console.log("API Response:", data);
+        
         if (response.ok) {
-          const data = await response.json();
           console.log("Fetched user role:", data.role);
           setUserRole(data.role);
         } else {
-          console.error("Failed to fetch user role:", response.status);
+          console.error("Failed to fetch user role:", response.status, data);
         }
       } catch (error) {
         console.error("Error fetching user role:", error);
