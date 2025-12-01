@@ -54,6 +54,9 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
         throw new Error(data.error || "Registration failed");
       }
 
+      // Wait 1.5 seconds to ensure the profile is created before reloading
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       // Refresh the page to update the UI
       window.location.reload();
     } catch (err) {
