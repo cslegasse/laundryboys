@@ -12,10 +12,10 @@ type OnboardingModalProps = {
 };
 
 export default function OnboardingModal({ user }: OnboardingModalProps) {
-  const [step, setStep] = useState<"choose" | "customer" | "company">("choose");
+  const [step, setStep] = useState<"choose" | "customer" | "company" | "confirm">("choose");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<"customer" | "admin" | null>(null);
   
   const [formData, setFormData] = useState({
     name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "",
@@ -55,8 +55,10 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
         throw new Error(data.error || "Registration failed");
       }
 
-      // Show success state
-      setSuccess(true);
+      // Show confirmation screen
+      setSelectedRole(role);
+      setStep("confirm");
+      setLoading(false);
     } catch (err) {
       console.error("Registration error:", err);
       setError(err instanceof Error ? err.message : "Failed to register");
@@ -81,8 +83,8 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl" />
 
           <div className="relative p-8">
-            {success ? (
-              // Success Screen
+            {step === "confirm" ? (
+              // Confirmation Screen
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -99,8 +101,8 @@ export default function OnboardingModal({ user }: OnboardingModalProps) {
                   </svg>
                 </motion.div>
                 
-                <h2 className="text-3xl font-black text-white mb-3">Registration Complete!</h2>
-                <p className="text-gray-300 mb-8">Your account has been successfully created. Click OK to continue.</p>
+                <h2 className="text-3xl font-black text-white mb-3">Great! You're All Set</h2>
+                <p className="text-gray-300 mb-8">Your {selectedRole === "admin" ? "business" : "customer"} account has been created successfully.</p>
                 
                 <button
                   onClick={() => window.location.reload()}
