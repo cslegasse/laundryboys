@@ -126,7 +126,7 @@ export default function Navbar() {
             </SignedOut>
             <SignedIn>
               <div className="flex items-center gap-2">
-                {!loadingRole && (
+                {!loadingRole && userRole && (
                   <Link
                     href={userRole === "admin" ? "/admin" : "/customer"}
                     className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
@@ -190,7 +190,7 @@ export default function Navbar() {
                   transition={{ delay: navItems.length * 0.1 }}
                 >
                   <SignedIn>
-                    {!loadingRole && (
+                    {!loadingRole && userRole && (
                       <Link
                         href={userRole === "admin" ? "/admin" : "/customer"}
                         onClick={() => setIsOpen(false)}
@@ -198,7 +198,7 @@ export default function Navbar() {
                           isScrolled ? "text-gray-800 hover:bg-gray-100" : "text-gray-700 hover:text-purple-600 hover:bg-white/30"
                         }`}
                       >
-                        {userRole === "admin" ? "Dashboard" : "Order"}
+                        {userRole === "admin" ? "Dashboard" : "Orders"}
                       </Link>
                     )}
                   </SignedIn>
