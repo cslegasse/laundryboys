@@ -233,36 +233,6 @@ export default function Home() {
           <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float animation-delay-2000"></div>
 
           <div className="relative container mx-auto px-6 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="glass-card rounded-3xl p-12 text-center shadow-2xl"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl"></div>
-              
-              <div className="relative">
-                <motion.h2
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  className="text-4xl sm:text-5xl font-black text-white mb-4 leading-tight"
-                >
-                  Modernize Your Laundry Business Today.
-                </motion.h2>
-                <p className="text-gray-300 mb-8 text-lg sm:text-xl">
-                  Try a free demo and see how Kleanr can save time, reduce errors, and keep your customers happier.
-                </p>
-                <Link href="/demo">
-                  <button className="px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl inline-flex items-center gap-3">
-                    Get Started Now 
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </Link>
-                <p className="text-gray-400 mt-4 text-sm">
-                  No credit card required • Setup in under 10 minutes • Cancel anytime
-                </p>
-              </div>
-            </motion.div>
           </div>
         </Section>
 
