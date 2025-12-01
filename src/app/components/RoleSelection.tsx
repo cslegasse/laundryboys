@@ -52,6 +52,10 @@ export default function RoleSelectionModal({
     } else if (result.success) {
       console.log("Onboarding successful!");
       onComplete(); // This will close the modal
+      // Give the modal a moment to close, then reload so server-side UI updates
+      setTimeout(() => {
+        if (typeof window !== "undefined") window.location.reload();
+      }, 300);
     }
   };
 

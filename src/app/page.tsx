@@ -100,10 +100,7 @@ export default function Home() {
               custom={2}
               className="mt-10 flex flex-col sm:flex-row justify-center gap-4"
             >
-              <Link href="/demo" className="px-8 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold shadow-2xl hover:scale-105 transition-all duration-300 inline-flex items-center justify-center gap-2">
-                Get a Demo
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              
               <Link href="/features" className="px-8 py-4 glass-card border-2 border-white/20 text-white rounded-xl text-lg font-bold hover:glass-card-hover hover:scale-105 transition-all duration-300 inline-flex items-center justify-center">
                 See How It Works
               </Link>
