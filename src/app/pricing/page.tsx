@@ -220,39 +220,6 @@ export default function PricingPage() {
         </Section>
 
         <Section className="relative">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="relative glass-card rounded-3xl p-12 text-center overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20" />
-              <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float" />
-              <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float animation-delay-2000" />
-              
-              <div className="relative">
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-                  Ready to Get Started?
-                </h2>
-                <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                  Join hundreds of dry cleaners whove already transformed their operations
-                </p>
-                <button
-                  onClick={handleSubscribe}
-                  disabled={loading}
-                  className="px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl disabled:opacity-50"
-                >
-                  {loading ? "Starting..." : "Start Free Trial"}
-                </button>
-                <p className="text-gray-400 mt-4 text-sm">
-                  No credit card required • Cancel anytime • Free 14-day trial
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </Section>
-
-        <Section className="relative">
           <div className="absolute inset-0 bg-dots-pattern opacity-10" />
           <div className="relative">
             <FAQ />

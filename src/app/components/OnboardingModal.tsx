@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Building2, User, X, MapPin, Mail, Sparkles } from "lucide-react";
+import { Building2, User, MapPin, Mail, Sparkles } from "lucide-react";
 
 type OnboardingModalProps = {
   user: {
@@ -9,10 +9,9 @@ type OnboardingModalProps = {
     firstName?: string | null;
     lastName?: string | null;
   };
-  onClose: () => void;
 };
 
-export default function OnboardingModal({ user, onClose }: OnboardingModalProps) {
+export default function OnboardingModal({ user }: OnboardingModalProps) {
   const [step, setStep] = useState<"choose" | "customer" | "company">("choose");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,7 +124,7 @@ export default function OnboardingModal({ user, onClose }: OnboardingModalProps)
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:rotate-6 transition-transform">
                       <User className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">I'm a Customer</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">I&apos;m a Customer</h3>
                     <p className="text-gray-300 text-sm">
                       I want to find laundry services and place orders
                     </p>
