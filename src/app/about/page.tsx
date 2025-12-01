@@ -93,7 +93,7 @@ export default function About() {
         <Section className="relative text-center">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2aDRWMTBoLTR2Nk0yMCAzNmg0djZoLTR2LTZNMzYgMzZoNHY2aC00di02Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
           
-          <div className="absolute -top-20 left-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-blob"></div>
+          
           <div className="absolute top-40 right-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
           <div className="absolute -bottom-20 left-1/2 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
 
@@ -288,40 +288,7 @@ export default function About() {
           </div>
         </Section>
 
-        {/* CTA Section */}
-        <Section className="relative">
-          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-          <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float animation-delay-2000"></div>
-          
-          <div className="relative container mx-auto px-6 max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="glass-card rounded-3xl p-12 text-center shadow-2xl"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl"></div>
-              
-              <div className="relative">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  className="text-4xl sm:text-5xl font-black text-white mb-6 leading-tight"
-                >
-                  Ready to Transform Your Business?
-                </motion.h2>
-                <p className="text-gray-300 mb-8 text-lg">
-                  Join hundreds of dry cleaners already modernized their operations with Kleanr.
-                </p>
-                <Link href="/pricing">
-                  <button className="btn-modern px-10 py-4 bg-gradient-modern text-white rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl">
-                    Get Started Today
-                  </button>
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </Section>
+        
 
         <FAQ />
       </main>
