@@ -103,11 +103,8 @@ export default function AdminDashboard() {
         orderId: cancelOrderId,
         status: "cancelled",
       });
-      
-      // Update local state
-      setOrders(orders.map(o => 
-        o.id === cancelOrderId ? { ...o, status: "cancelled" } : o
-      ));
+
+      setOrders(orders.filter(o => o.id !== cancelOrderId));
       setCancelOrderId(null);
     } catch (err) {
       console.error("Error cancelling order:", err);

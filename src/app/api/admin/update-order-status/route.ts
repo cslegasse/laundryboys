@@ -53,6 +53,21 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Order not found or unauthorized" }, { status: 404 });
   }
 
+  // If status is cancelled, delete the order instead of updating
+  if (status === "cancelled") {
+    const { error: deleteError } = await supabaseAdmin
+      .from("orders")
+      .delete()
+      .eq("id", orderId);
+
+    if (deleteError) {
+      console.error("Error deleting order:", deleteError);
+      return NextResponse.json({ error: "Failed to delete order" }, { status: 500 });
+    }
+
+    return NextResponse.json({ deleted: true });
+  }
+
   // Update the order status
   const { data, error } = await supabaseAdmin
     .from("orders")
