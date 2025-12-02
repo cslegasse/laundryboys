@@ -301,7 +301,7 @@ export default function CustomerOrdersPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left: Order creator (calendar + service selector + confirm/decline) */}
           <div className="glass-card p-6 rounded-2xl shadow-2xl">
-            <h2 className="text-xl font-semibold mb-4">Schedule Service</h2>
+            <h2 className="text-xl font-semibold mb-4 text-purple-300">Schedule Service</h2>
             <div className="mb-4">
               <label className="block text-sm text-gray-200 mb-2">Select date</label>
               <input type="date" value={scheduledDate} onChange={e => setScheduledDate(e.target.value)} className="w-full p-3 rounded bg-white/90 text-black" />
