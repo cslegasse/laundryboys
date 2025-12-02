@@ -1,7 +1,8 @@
 import CheckoutSuccessClient from "./CheckoutSuccessClient";
 
-export default function Page({ searchParams }: { searchParams?: { session_id?: string } }) {
-  const session_id = searchParams?.session_id ?? null;
+export default async function Page({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
+  const params = await searchParams;
+  const session_id = params?.session_id ?? null;
 
   return (
     <div>

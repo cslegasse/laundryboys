@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Package, TrendingUp, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { Package, TrendingUp, Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react";
 import axios from "axios";
 
 type Order = {
   id: string;
   customer_name: string;
-  status: "pending" | "completed" | "cancelled";
+  status: "in_progress" | "ready_for_pickup" | "completed" | "cancelled";
   total: number;
   created_at: string;
 };
@@ -32,6 +32,7 @@ export default function AdminDashboard() {
   const [dailyVolume, setDailyVolume] = useState<DailyVolume[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [cancelOrderId, setCancelOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchOrders() {
@@ -73,16 +74,52 @@ export default function AdminDashboard() {
   }, []);
 
   const totalOrders = orders.length;
-  const pendingOrders = orders.filter((o) => o.status === "pending").length;
+  const pendingOrders = orders.filter((o) => o.status === "in_progress").length;
   const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
   const maxVolume = Math.max(...dailyVolume.map((d) => d.count), 1);
+
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    try {
+      await axios.post("/api/admin/update-order-status", {
+        orderId,
+        status: newStatus,
+      });
+      
+      // Update local state
+      setOrders(orders.map(o => 
+        o.id === orderId ? { ...o, status: newStatus as Order["status"] } : o
+      ));
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Failed to update order status");
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    if (!cancelOrderId) return;
+    
+    try {
+      await axios.post("/api/admin/update-order-status", {
+        orderId: cancelOrderId,
+        status: "cancelled",
+      });
+
+      setOrders(orders.filter(o => o.id !== cancelOrderId));
+      setCancelOrderId(null);
+    } catch (err) {
+      console.error("Error cancelling order:", err);
+      alert("Failed to cancel order");
+    }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
         return <CheckCircle className="w-5 h-5 text-green-400" />;
-      case "pending":
-        return <Clock className="w-5 h-5 text-yellow-400" />;
+      case "in_progress":
+        return <Clock className="w-5 h-5 text-blue-400" />;
+      case "ready_for_pickup":
+        return <Package className="w-5 h-5 text-yellow-400" />;
       case "cancelled":
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       default:
@@ -94,7 +131,9 @@ export default function AdminDashboard() {
     switch (status) {
       case "completed":
         return "text-green-400";
-      case "pending":
+      case "in_progress":
+        return "text-blue-400";
+      case "ready_for_pickup":
         return "text-yellow-400";
       case "cancelled":
         return "text-red-400";
@@ -212,10 +251,9 @@ export default function AdminDashboard() {
               initial="hidden"
               animate="visible"
               custom={5}
-              className="group relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden hover:bg-white/15 transition-all duration-300"
+              className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative overflow-x-auto">
+              <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-white/10 bg-white/5">
@@ -233,6 +271,9 @@ export default function AdminDashboard() {
                       </th>
                       <th className="px-6 py-4 text-left text-white font-semibold">
                         Date
+                      </th>
+                      <th className="px-6 py-4 text-center text-white font-semibold">
+                        Actions
                       </th>
                     </tr>
                   </thead>
@@ -257,17 +298,17 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4 text-gray-200">
                             {order.customer_name}
                           </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              {getStatusIcon(order.status)}
-                              <span
-                                className={`capitalize font-semibold ${getStatusColor(
-                                  order.status
-                                )}`}
-                              >
-                                {order.status}
-                              </span>
-                            </div>
+                          <td className="px-6 py-4 relative z-10">
+                            <select
+                              value={order.status}
+                              onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                              className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border-2 border-purple-400/30 rounded-xl px-4 py-2.5 text-white font-semibold cursor-pointer hover:border-purple-400/50 hover:from-purple-600/30 hover:to-blue-600/30 focus:outline-none focus:ring-2 focus:ring-purple-400/50 transition-all duration-300 shadow-lg"
+                              style={{ minWidth: '160px' }}
+                            >
+                              <option value="in_progress" className="bg-gray-900 text-white">In Progress</option>
+                              <option value="ready_for_pickup" className="bg-gray-900 text-white">Ready for Pickup</option>
+                              <option value="completed" className="bg-gray-900 text-white">Completed</option>
+                            </select>
                           </td>
                           <td className="px-6 py-4 text-right text-white font-semibold">
                             ${order.total.toFixed(2)}
@@ -282,6 +323,15 @@ export default function AdminDashboard() {
                               }
                             )}
                           </td>
+                          <td className="px-6 py-4 text-center relative z-10">
+                            <button
+                              onClick={() => setCancelOrderId(order.id)}
+                              className="group/btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 hover:bg-red-500/30 border-2 border-red-400/30 hover:border-red-400/60 transition-all duration-300 hover:scale-110"
+                              title="Cancel order"
+                            >
+                              <XCircle className="w-5 h-5 text-red-400 group-hover/btn:font-bold group-hover/btn:scale-110 transition-transform duration-200" strokeWidth={2.5} />
+                            </button>
+                          </td>
                         </motion.tr>
                       ))}
                   </tbody>
@@ -291,6 +341,43 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Cancel Confirmation Modal */}
+      {cancelOrderId && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-red-400/30 rounded-2xl p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                <XCircle className="w-7 h-7 text-red-400" strokeWidth={2.5} />
+              </div>
+              <h3 className="text-2xl font-bold text-white">Cancel Order?</h3>
+            </div>
+            
+            <p className="text-gray-300 mb-8">
+              Are you sure you want to cancel this order? This action cannot be undone.
+            </p>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={() => setCancelOrderId(null)}
+                className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold transition-all duration-300"
+              >
+                No, Keep It
+              </button>
+              <button
+                onClick={handleCancelOrder}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 rounded-xl text-white font-semibold shadow-lg transition-all duration-300"
+              >
+                Yes, Cancel
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

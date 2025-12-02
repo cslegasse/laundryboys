@@ -32,6 +32,7 @@ export default function CustomerOrdersPage() {
     status?: string;
     company?: string | null;
     estimated_minutes?: number | null;
+    estimated_days?: number | null;
   };
 
   const [orders, setOrders] = useState<OrderRecord[]>([]);
@@ -230,7 +231,8 @@ export default function CustomerOrdersPage() {
   }
   */
 
-  // Global pay: process all unpaid cart items - redirect to Stripe Checkout
+  
+  // Pay for one order at a time - redirect to Stripe Checkout
   async function handlePayAll() {
     const unpaid = cartItems.filter(c => c.status === "unpaid");
     if (unpaid.length === 0) {
@@ -240,16 +242,30 @@ export default function CustomerOrdersPage() {
 
     try {
       setSubmitting(true);
-      // Prepare payload: send unpaid cart items to Stripe Checkout
-      // Ensure company is present on cart items (if set in creator)
-      const cartToSend: CartItem[] = unpaid.map(c => ({ ...c, company: c.company ?? company ?? null }));
+      setError(null);
+      
+      // Only process the first unpaid order to avoid schema cache issues
+      const firstUnpaid = unpaid[0];
+      const cartToSend: CartItem[] = [{ 
+        ...firstUnpaid, 
+        company: firstUnpaid.company ?? company ?? null,
+        // Ensure estimated_days is set if not present
+        estimated_days: firstUnpaid.estimated_days ?? 5
+      }];
+      
+      console.log("Sending cart to checkout:", cartToSend);
+      
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: cartToSend }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Failed to start checkout");
+      
+      if (!res.ok) {
+        console.error("Checkout error:", data);
+        throw new Error(data?.error || "Failed to start checkout");
+      }
 
       // redirect user to Stripe Checkout
       if (data.url) {
@@ -258,8 +274,9 @@ export default function CustomerOrdersPage() {
         throw new Error("No redirect URL returned from checkout");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Payment error:", err);
       setError((err as Error).message);
+    } finally {
       setSubmitting(false);
     }
   }
@@ -414,33 +431,62 @@ export default function CustomerOrdersPage() {
                 <div key={o.id} className="p-4 glass-card rounded-lg card-hover-lift animate-fadeInUp">
                   <div className="flex justify-between">
                     <div>
-                      <p className="font-semibold">Order #{o.id}</p>
+                      <p className="font-semibold text-purple-300">Order #{o.id}</p>
                       <p className="text-sm text-gray-200">Placed: {o.created_at ? new Date(o.created_at).toLocaleString() : '—'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold">${o.total?.toFixed?.(2) ?? o.total}</p>
-                      <p className="text-sm text-gray-200">Status: {o.status}</p>
+                      <p className="font-semibold text-purple-300">${o.total?.toFixed?.(2) ?? o.total}</p>
+                      <p className="text-sm text-gray-200">
+                        Status: <span className={`font-semibold ${
+                          o.status === 'completed' ? 'text-green-400' : 
+                          o.status === 'ready_for_pickup' ? 'text-yellow-400' : 
+                          o.status === 'in_progress' ? 'text-blue-400' : 
+                          'text-red-400'
+                        }`}>
+                          {o.status === 'in_progress' ? 'In Progress' : 
+                           o.status === 'ready_for_pickup' ? 'Ready for Pickup' : 
+                           o.status === 'completed' ? 'Completed' : 
+                           o.status === 'cancelled' ? 'Cancelled' :
+                           o.status}
+                        </span>
+                      </p>
                     </div>
                   </div>
                   <div className="mt-2 text-sm text-gray-200">
-                    <strong>Items:</strong>
-                    <ul className="list-disc ml-6">
-                      {(o.items || []).map((it: OrderItem, i: number) => (
-                        <li key={i}>{it.label} — {it.qty} pcs</li>
-                      ))}
-                    </ul>
+                    <strong className="text-purple-300">Items:</strong>
+                    {(o.items && o.items.length > 0) ? (
+                      <ul className="list-disc ml-6">
+                        {o.items.map((it: OrderItem, i: number) => (
+                          <li key={i}>{it.label} — {it.qty} pcs</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <span className="ml-2">No items listed</span>
+                    )}
                   </div>
-                  <div className="mt-2 text-sm text-gray-200">Company: {o.company ?? '—'}</div>
-                  <div className="mt-2 text-sm text-gray-300">Estimated time: {o.estimated_minutes ? Math.ceil(o.estimated_minutes / (24*60)) : '—'} day{(o.estimated_minutes ? Math.ceil(o.estimated_minutes / (24*60)) : 0) !== 1 ? 's' : ''}</div>
+                  <div className="mt-2 text-sm text-gray-200"><span className="text-purple-300 font-semibold">Company:</span> {o.company || '—'}</div>
+                  <div className="mt-2 text-sm text-gray-200">
+                    <span className="text-purple-300 font-semibold">Estimated Completion:</span>{' '}
+                    {(o.estimated_days && o.created_at) ? (() => {
+                      const created = new Date(o.created_at);
+                      const completedMs = created.getTime() + o.estimated_days * 24 * 60 * 60 * 1000;
+                      return new Date(completedMs).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      });
+                    })()
+                    : '—'}
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
-        {/* Floating pay action (bottom-right) for all unpaid cart items */}
+        {/* Floating pay action (bottom-right) - pay one order at a time */}
         <div className="fixed bottom-6 right-6 z-50">
           <button onClick={handlePayAll} disabled={submitting || cartItems.every(c => c.status === 'paid')} className="px-5 py-3 bg-gradient-modern text-white rounded-full shadow-glow">
-            {submitting ? 'Processing...' : `Pay All (${cartItems.filter(c => c.status === 'unpaid').length})`}
+            {submitting ? 'Processing...' : cartItems.filter(c => c.status === 'unpaid').length > 0 ? `Pay Next Order (${cartItems.filter(c => c.status === 'unpaid').length} pending)` : 'All Paid'}
           </button>
         </div>
       </div>

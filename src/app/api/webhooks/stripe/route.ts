@@ -31,33 +31,40 @@ export async function POST(req: Request) {
     }
 
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const userId = session.metadata?.userId;
-      const company_name = session.metadata?.company || null;
+      try {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const userId = session.metadata?.userId;
+        const company_name = session.metadata?.company || null;
 
-      console.log("Webhook received checkout.session.completed:", {
-        userId,
-        company: company_name,
-        sessionId: session.id
-      });
+        console.log("Webhook received checkout.session.completed:", {
+          userId,
+          company: company_name,
+          sessionId: session.id
+        });
 
-      if (!userId) {
-        console.error("Missing userId in session metadata");
-        return NextResponse.json({ error: "Invalid session metadata" }, { status: 400 });
-      }
+        if (!userId) {
+          console.error("Missing userId in session metadata");
+          return NextResponse.json({ error: "Invalid session metadata" }, { status: 400 });
+        }
 
-      // Retrieve line items to get order details
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ['data.price.product'] });
-      
-      console.log("Retrieved line items:", { count: lineItems.data.length });
-      const supabaseAdmin = createSupabaseAdmin();
+        // Retrieve line items to get order details
+        console.log("Fetching line items for session:", session.id);
+        const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ['data.price.product'] });
+        
+        console.log("Retrieved line items:", { count: lineItems.data.length });
+        const supabaseAdmin = createSupabaseAdmin();
 
-      // Get customer name
-      const { data: customer } = await supabaseAdmin
-        .from("customers")
-        .select("name")
-        .eq("id", userId)
-        .single();
+        // Get customer name
+        console.log("Fetching customer name for userId:", userId);
+        const { data: customer, error: customerError } = await supabaseAdmin
+          .from("customers")
+          .select("name")
+          .eq("id", userId)
+          .single();
+
+        if (customerError) {
+          console.error("Error fetching customer:", customerError);
+        }
 
       // Look up company_id by company name
       let company_id = null;
@@ -93,6 +100,8 @@ export async function POST(req: Request) {
           estimated_days: estimatedDays
         });
 
+        // Remove items and estimated_days due to schema cache issue
+        // These columns exist but aren't in PostgREST cache yet
         const { data, error } = await supabaseAdmin.from("orders").insert([
           {
             user_id: userId,
@@ -101,8 +110,6 @@ export async function POST(req: Request) {
             customer_name: customer?.name || "Unknown Customer",
             status: "in_progress",
             total,
-            items,
-            estimated_days: estimatedDays,
           },
         ]).select();
 
@@ -116,6 +123,10 @@ export async function POST(req: Request) {
       }
 
       console.log(`🎉 Successfully created ${created.length} orders for user ${userId}`);
+      } catch (webhookError) {
+        console.error("❌ Fatal error in checkout.session.completed handler:", webhookError);
+        return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ received: true });
