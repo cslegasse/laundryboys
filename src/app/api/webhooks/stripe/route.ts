@@ -33,14 +33,23 @@ export async function POST(req: Request) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.userId;
-      const cartDataStr = session.metadata?.cartData;
+      const company_name = session.metadata?.company || null;
 
-      if (!userId || !cartDataStr) {
-        console.error("Missing userId or cartData in session metadata");
+      console.log("Webhook received checkout.session.completed:", {
+        userId,
+        company: company_name,
+        sessionId: session.id
+      });
+
+      if (!userId) {
+        console.error("Missing userId in session metadata");
         return NextResponse.json({ error: "Invalid session metadata" }, { status: 400 });
       }
 
-      const cart = JSON.parse(cartDataStr);
+      // Retrieve line items to get order details
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ['data.price.product'] });
+      
+      console.log("Retrieved line items:", { count: lineItems.data.length });
       const supabaseAdmin = createSupabaseAdmin();
 
       // Get customer name
@@ -50,49 +59,63 @@ export async function POST(req: Request) {
         .eq("id", userId)
         .single();
 
-      const created: Array<Record<string, unknown>> = [];
-      for (const ci of cart) {
-        const items = ci.items || [];
-        const total = ci.total || 0;
-        const estimated_minutes = ci.estimated_minutes || 0;
-        const company_name = ci.company ?? null;
+      // Look up company_id by company name
+      let company_id = null;
+      if (company_name) {
+        const { data: company } = await supabaseAdmin
+          .from("companies")
+          .select("id")
+          .ilike("name", company_name)
+          .single();
+        
+        company_id = company?.id || null;
+        console.log("Company lookup:", { company_name, company_id });
+      }
 
-        // Look up company_id by company name
-        let company_id = null;
-        if (company_name) {
-          const { data: company } = await supabaseAdmin
-            .from("companies")
-            .select("id")
-            .ilike("name", company_name)
-            .single();
-          
-          company_id = company?.id || null;
-        }
+      const created: Array<Record<string, unknown>> = [];
+      
+      // Create one order per line item
+      for (const lineItem of lineItems.data) {
+        const product = lineItem.price?.product;
+        const productMetadata = typeof product === 'object' && product !== null ? (product as Stripe.Product).metadata : {};
+        
+        const estimatedDays = parseInt(productMetadata.estimatedDays || "5");
+        const itemsJson = productMetadata.itemsJson || "[]";
+        const items = JSON.parse(itemsJson);
+        const total = (lineItem.amount_total || 0) / 100; // Convert from cents
+
+        console.log("Creating order from line item:", {
+          user_id: userId,
+          company_name,
+          company_id,
+          total,
+          items_count: items.length,
+          estimated_days: estimatedDays
+        });
 
         const { data, error } = await supabaseAdmin.from("orders").insert([
           {
             user_id: userId,
-            customer_name: customer?.name || "Unknown Customer",
-            items,
-            total,
-            estimated_minutes,
-            company_name,
             company_id,
-            status: "paid",
-            stripe_payment_intent: session.payment_intent,
-            stripe_session_id: session.id,
+            company_name,
+            customer_name: customer?.name || "Unknown Customer",
+            status: "in_progress",
+            total,
+            items,
+            estimated_days: estimatedDays,
           },
         ]).select();
 
         if (error) {
-          console.error("Error creating order from webhook:", error);
+          console.error("❌ Error creating order from webhook:", error);
           return NextResponse.json({ error: "Failed to create orders" }, { status: 500 });
         }
 
+        console.log("✅ Order created successfully! Order ID:", data?.[0]?.id, "Total:", data?.[0]?.total);
         created.push((data?.[0] ?? {}) as Record<string, unknown>);
       }
 
-      console.log(`Successfully created ${created.length} orders for user ${userId}`);
+      console.log(`🎉 Successfully created ${created.length} orders for user ${userId}`);
     }
 
     return NextResponse.json({ received: true });
