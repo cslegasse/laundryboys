@@ -32,6 +32,7 @@ export default function CustomerOrdersPage() {
     status?: string;
     company?: string | null;
     estimated_minutes?: number | null;
+    estimated_days?: number | null;
   };
 
   const [orders, setOrders] = useState<OrderRecord[]>([]);
