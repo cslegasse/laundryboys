@@ -467,13 +467,16 @@ export default function CustomerOrdersPage() {
                   <div className="mt-2 text-sm text-gray-200"><span className="text-purple-300 font-semibold">Company:</span> {o.company || '—'}</div>
                   <div className="mt-2 text-sm text-gray-200">
                     <span className="text-purple-300 font-semibold">Estimated Completion:</span>{' '}
-                    {o.estimated_days ? 
-                      new Date(new Date(o.created_at).getTime() + o.estimated_days * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                      }) 
-                      : '—'}
+                    {(o.estimated_days && o.created_at) ? (() => {
+                      const created = new Date(o.created_at);
+                      const completedMs = created.getTime() + o.estimated_days * 24 * 60 * 60 * 1000;
+                      return new Date(completedMs).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      });
+                    })()
+                    : '—'}
                   </div>
                 </div>
               ))}
