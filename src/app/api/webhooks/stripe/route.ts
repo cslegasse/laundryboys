@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createSupabaseAdmin } from "@/app/api/supabase-server";
 
+// Track processed sessions to prevent duplicates
+const processedSessions = new Set<string>();
+
 function getStripeAndSecrets() {
   const stripeSecret = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -35,11 +38,12 @@ export async function POST(req: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.userId;
         const company_name = session.metadata?.company || null;
+        const sessionId = session.id;
 
         console.log("Webhook received checkout.session.completed:", {
           userId,
           company: company_name,
-          sessionId: session.id
+          sessionId
         });
 
         if (!userId) {
@@ -47,12 +51,22 @@ export async function POST(req: Request) {
           return NextResponse.json({ error: "Invalid session metadata" }, { status: 400 });
         }
 
+        // Prevent duplicate processing of the same session
+        if (processedSessions.has(sessionId)) {
+          console.log(`⚠️ Session ${sessionId} already processed, skipping duplicate`);
+          return NextResponse.json({ received: true, skipped: "Duplicate" });
+        }
+        processedSessions.add(sessionId);
+        // Clean up old sessions after 5 minutes
+        setTimeout(() => processedSessions.delete(sessionId), 5 * 60 * 1000);
+
+        const supabaseAdmin = createSupabaseAdmin();
+
         // Retrieve line items to get order details
         console.log("Fetching line items for session:", session.id);
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ['data.price.product'] });
         
         console.log("Retrieved line items:", { count: lineItems.data.length });
-        const supabaseAdmin = createSupabaseAdmin();
 
         // Get customer name
         console.log("Fetching customer name for userId:", userId);
@@ -66,20 +80,7 @@ export async function POST(req: Request) {
           console.error("Error fetching customer:", customerError);
         }
 
-      // Look up company_id by company name
-      let company_id = null;
-      if (company_name) {
-        const { data: company } = await supabaseAdmin
-          .from("companies")
-          .select("id")
-          .ilike("name", company_name)
-          .single();
-        
-        company_id = company?.id || null;
-        console.log("Company lookup:", { company_name, company_id });
-      }
-
-      const created: Array<Record<string, unknown>> = [];
+        const created: Array<Record<string, unknown>> = [];
       
       // Create one order per line item
       for (const lineItem of lineItems.data) {
@@ -90,11 +91,26 @@ export async function POST(req: Request) {
         const itemsJson = productMetadata.itemsJson || "[]";
         const items = JSON.parse(itemsJson);
         const total = (lineItem.amount_total || 0) / 100; // Convert from cents
+        
+        // Get company from line item metadata (not session metadata)
+        const itemCompanyName = productMetadata.company || null;
+        
+        // Look up company_id for this specific line item
+        let itemCompanyId = null;
+        if (itemCompanyName) {
+          const { data: company } = await supabaseAdmin
+            .from("companies")
+            .select("id")
+            .ilike("name", itemCompanyName)
+            .single();
+          
+          itemCompanyId = company?.id || null;
+        }
 
         console.log("Creating order from line item:", {
           user_id: userId,
-          company_name,
-          company_id,
+          company_name: itemCompanyName,
+          company_id: itemCompanyId,
           total,
           items_count: items.length,
           estimated_days: estimatedDays
@@ -105,8 +121,8 @@ export async function POST(req: Request) {
         const { data, error } = await supabaseAdmin.from("orders").insert([
           {
             user_id: userId,
-            company_id,
-            company_name,
+            company_id: itemCompanyId,
+            company_name: itemCompanyName,
             customer_name: customer?.name || "Unknown Customer",
             status: "in_progress",
             total,

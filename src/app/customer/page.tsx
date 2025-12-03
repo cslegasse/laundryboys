@@ -39,6 +39,7 @@ export default function CustomerOrdersPage() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [, setError] = useState<string | null>(null);
+  const [showUnpaidModal, setShowUnpaidModal] = useState(false);
   // New UI state for the order creator + cart
   const [scheduledDate, setScheduledDate] = useState<string>(() => {
     const d = new Date();
@@ -190,6 +191,14 @@ export default function CustomerOrdersPage() {
   // Confirm from the creator: adds a cart item (unpaid). Placeholder for checkout integration.
   function handleConfirmToCart() {
     setError(null);
+    
+    // Check if there are any unpaid orders
+    const hasUnpaidOrders = cartItems.some(c => c.status === 'unpaid');
+    if (hasUnpaidOrders) {
+      setShowUnpaidModal(true);
+      return;
+    }
+    
     const items = Object.entries(quantities)
       .filter(([, qty]) => qty > 0)
       .map(([k, qty]) => ({ service: k as ServiceKey, qty, label: SERVICES[k as ServiceKey].label }));
@@ -281,6 +290,11 @@ export default function CustomerOrdersPage() {
     }
   }
 
+  // Delete unpaid order from cart
+  function handleDeleteOrder(cartId: string) {
+    setCartItems(prev => prev.filter(c => c.id !== cartId));
+  }
+
   if (!isSignedIn)
     return (
       <div className="min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -309,8 +323,8 @@ export default function CustomerOrdersPage() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm text-gray-200 mb-2">Company (who this order is for)</label>
-              <input type="text" value={company} onChange={e => setCompany(e.target.value)} placeholder="Company name (optional)" className="w-full p-3 rounded bg-white/90 text-black" />
+              <label className="block text-sm text-gray-200 mb-2">Specified Company</label>
+              <input type="text" value={company} onChange={e => setCompany(e.target.value)} placeholder="E.g. Kleaner" className="w-full p-3 rounded bg-white/90 text-black" />
             </div>
 
             <div className="mb-4">
@@ -383,9 +397,20 @@ export default function CustomerOrdersPage() {
                         <div className="font-semibold text-white">${ci.total.toFixed(2)}</div>
                         <div className="text-sm text-gray-300">{ci.status === 'paid' ? 'Paid' : 'Awaiting payment'}</div>
                         <div className="text-sm text-gray-300">Est. time: {ci.estimated_days ?? Math.ceil((ci.estimated_minutes ?? 0) / (24*60))} day{(ci.estimated_days ?? Math.ceil((ci.estimated_minutes ?? 0) / (24*60))) !== 1 ? 's' : ''}</div>
-                        <div className="mt-2">
+                        <div className="mt-2 flex items-center gap-2 justify-end">
                           {ci.status === 'unpaid' ? (
-                            <span className="text-sm text-yellow-300">Awaiting payment</span>
+                            <>
+                              <span className="text-sm text-yellow-300">Awaiting payment</span>
+                              <button 
+                                onClick={() => handleDeleteOrder(ci.id as string)} 
+                                className="text-red-400 hover:text-red-300"
+                                title="Delete order"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                            </>
                           ) : (
                             <span className="text-sm text-green-300">Completed</span>
                           )}
@@ -413,6 +438,28 @@ export default function CustomerOrdersPage() {
                   latest.setDate(latest.getDate() + Math.min(14, Math.max(1, days)));
                   return <span>{earliest.toLocaleDateString()} — {latest.toLocaleDateString()}</span>;
                 })()}
+              </div>
+            </div>
+
+            <div className="glass-card p-4 rounded-2xl shadow-sm">
+              <h3 className="font-semibold text-lg text-white mb-3">Our Services</h3>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <h4 className="font-semibold text-purple-300">Wash & Dry</h4>
+                  <p className="text-gray-300">Professional washing and drying service. Perfect for everyday laundry needs. Each unit handles 30 lbs of clothing.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-purple-300">Dry Clean</h4>
+                  <p className="text-gray-300">Premium dry cleaning for delicate fabrics and formal wear. Gentle care for your special garments. Each unit handles 5 articles.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-purple-300">Steam Press</h4>
+                  <p className="text-gray-300">Professional pressing service to remove wrinkles and creases. Your clothes will look crisp and professional. Each unit handles 10 articles.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-purple-300">Fold & Pack</h4>
+                  <p className="text-gray-300">Expert folding and packaging service. Your laundry returned neatly organized and ready to store. Each unit handles 30 lbs of laundry.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -489,6 +536,26 @@ export default function CustomerOrdersPage() {
             {submitting ? 'Processing...' : cartItems.filter(c => c.status === 'unpaid').length > 0 ? `Pay Next Order (${cartItems.filter(c => c.status === 'unpaid').length} pending)` : 'All Paid'}
           </button>
         </div>
+
+        {/* Modal for unpaid order warning */}
+        {showUnpaidModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="glass-card p-6 rounded-2xl shadow-2xl max-w-md w-full mx-4 animate-fadeInUp">
+              <h3 className="text-xl font-bold text-white mb-4">Cannot Create New Order</h3>
+              <p className="text-gray-200 mb-6">
+                You have an unpaid order. Please pay for your current order or delete it before creating a new one.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowUnpaidModal(false)}
+                  className="px-4 py-2 bg-gradient-modern text-white rounded-lg hover:opacity-90"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
