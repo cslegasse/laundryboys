@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"next dev --turbopack\" \"stripe listen --forward-to localhost:3000/api/webhooks/stripe\"",
+    "dev:next": "next dev --turbopack",
+    "dev:stripe": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
@@ -32,6 +34,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.16",
+    "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "postcss": "^8.4.31",
